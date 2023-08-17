@@ -2,6 +2,8 @@ const canvas = document.getElementById("gameCanvas");
 canvas.style.border = "1px solid black";
 canvas.style.backgroundColor = "#99714bb3";
 const ctx = canvas.getContext("2d");
+const backgroundImage = new Image();
+backgroundImage.src = 'assets/battleground.png'; // Replace with the path to your background image
 
 const MAX_CANNON_ANGLE = Math.PI / 2.5; // 45 degrees in radians
 const MIN_CANNON_ANGLE = -Math.PI / 2.5; // -45 degrees in radians
@@ -26,23 +28,16 @@ let tank_cannon = {
 	angle: 0,  // Set to 0 so the cannon starts at the front
 	rotationSpeed: 0.02,
 	muzzleFlash: false,
-	flashDuration: 200,  // duration in milliseconds, you can adjust as needed
+	flashDuration: 400,  // duration in milliseconds, you can adjust as needed
 	flashSize: 0
 };
-let obstacle = {
-	x: canvas.width / 2 - 50, // Placing the obstacle in the middle of the canvas as an example
-	y: canvas.height / 2 - 50,
-	width: 100,
-	height: 100,
-	color: 'darkred'
-};
-
+let enemyEmitter
 let tankTrail = [];
 let arrowLength = 40;
 let bullets = [];
 let keys = {};
 let ammo = {
-	currentType: 'standard',
+	currentType: 'armorPiercing',
 	standard: {
 		count: 20,
 		speed: 5,
@@ -72,13 +67,13 @@ let ammo = {
 		reloading: false
 	},
 	armorPiercing: {
-		count: 10,
-		speed: 7,
+		count: 1000,
+		speed: 10,
 		color1: 'blue',
 		color2: 'darkblue',
 		size: 4,
 		effect: 'penetrate',
-		magazineSize: 4,
+		magazineSize: 100,
 		currentMagazine: 4,
 		fireRate: 300,
 		lastFired: 0,
@@ -88,9 +83,44 @@ let ammo = {
 };
 let tabPressed = false;
 let score = 0;
-
+let particles = [];
+let droppedAmmo = [];
 let enemies = [];
+const rocks = [];
+let rockImage = new Image();
+rockImage.src = 'assets/tree_assets/Trees_texture_shadow_dark/Snow_christmass_tree1.png';
+const snowflakes = [];
+const numberOfSnowflakes = 200; // Adjust for more or less snow
 
+class Particle {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+		this.size = Math.random() * 5 + 1; // varying sizes
+		this.speedX = Math.random() * 5 - 2.5; // wider horizontal range
+		this.speedY = Math.random() * -3 - 1;  // negative for upwards movement
+		this.gravity = 0.1; // adjust as needed
+		this.alpha = 1;
+	}
+	
+	update() {
+		this.speedY += this.gravity; // apply gravity
+		this.y += this.speedY;
+		this.x += this.speedX;
+		this.alpha -= 0.005; // adjust as needed for fade-out speed
+	}
+	
+	draw(ctx) {
+		ctx.save(); // Save the current context state
+		ctx.globalAlpha = this.alpha; // for fade-out effect
+		ctx.fillStyle = `rgba(${Math.floor(Math.random() * 55 + 200)}, 0, 0, 0.8)`; // shades of red
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		ctx.fill();
+		ctx.restore(); // Restore the context state to what it was before
+	}
+	
+}
 class Enemy {
 	constructor(x, y, width, height, speed) {
 		this.x = x;
@@ -98,99 +128,291 @@ class Enemy {
 		this.width = width;
 		this.height = height;
 		this.speed = speed;
-		this.dx = Math.random() * this.speed - this.speed / 2;
-		this.dy = Math.random() * this.speed - this.speed / 2;
+		this.framesSinceLastChange = 0;
+		
+		this.changeDirection(); // Set initial direction
+		
+		// Add a property to hold the enemy image
+		this.image = new Image();
+		this.image.src = 'assets/enemy/enemy.png'; // the path to your enemy image
+	}
+	
+	changeDirection() {
+		// Randomly set dx and dy to achieve random directions
+		this.dx = (Math.random() - 0.5) * this.speed;
+		this.dy = (Math.random() - 0.5) * this.speed;
+		this.framesSinceLastChange = 0;
 	}
 	
 	draw() {
-		ctx.fillStyle = "#000";
-		ctx.fillRect(this.x, this.y, this.width, this.height);
+		// Instead of filling a rectangle, draw the enemy image
+		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 	}
 	
 	update() {
-		let potentialNewX = this.x + this.dx;
-		let potentialNewY = this.y + this.dy;
-		
-		if (!isColliding({ x: potentialNewX, y: this.y, width: this.width, height: this.height }, obstacle)) {
-			this.x = potentialNewX;
+		// Increase the frames counter
+		this.x = this.x + this.dx;
+		this.y = this.y + this.dy;
+	}
+}
+class Snowflake {
+	constructor() {
+		this.x = Math.random() * canvas.width;
+		this.y = Math.random() * canvas.height;
+		this.radius = Math.random() * 5 + 1; // Snowflake size
+		this.speed = Math.random() * 3 + 1; // Falling speed
+	}
+	
+	update() {
+		this.y += this.speed;
+		// Reset snowflake to the top once it goes beyond canvas height
+		if (this.y > canvas.height) {
+			this.y = 0;
+			this.x = Math.random() * canvas.width;
 		}
-		if (!isColliding({ x: this.x, y: potentialNewY, width: this.width, height: this.height }, obstacle)) {
-			this.y = potentialNewY;
+	}
+	
+	draw() {
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+		ctx.fillStyle = 'white'; // Snowflake color
+		ctx.fill();
+		ctx.closePath();
+	}
+}
+class MuzzleParticle {
+	constructor(x, y, angle) {
+		this.x = x;
+		this.y = y;
+		this.speed = Math.random() * 5 + 2;  // Random speed between 2 and 7
+		this.life = Math.random() * 0.8 + 0.2;  // Life between 0.2 and 1 second
+		this.alpha = 1;
+		this.dx = Math.cos(angle) * this.speed;
+		this.dy = Math.sin(angle) * this.speed;
+	}
+	
+	update() {
+		this.x += this.dx;
+		this.y += this.dy;
+		this.life -= 0.04;  // Decrement the life every frame
+		this.alpha -= 0.01;
+	}
+	
+	// Function to get a random color among shades of red, yellow, and orange
+	getRandomColor() {
+		const colors = [
+			`rgba(${255}, ${Math.floor(Math.random() * 56)}, 0, 1)`, // Red to Orange shades
+			`rgba(${255}, ${Math.floor(Math.random() * 156) + 100}, 0, 1)`, // Yellow shades
+			`rgba(${255 - Math.floor(Math.random() * 56)}, ${64 + Math.floor(Math.random() * 56)}, 0, 1)` // Orange shades
+		];
+		return colors[Math.floor(Math.random() * colors.length)];
+	}
+	
+	draw(ctx) {
+		ctx.save();
+		ctx.globalAlpha = this.alpha;
+		ctx.fillStyle = this.getRandomColor();  // Using the random color function
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, 1, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.restore();
+	}
+}
+
+
+// Function to generate particles
+// Smoke Particle Class
+class SmokeParticle {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+		this.speed = Math.random() * 0.5 + 0.5; // Slower speed, between 0.5 and 1
+		const randomAngle = Math.random() * (Math.PI * 2);
+		this.dx = Math.cos(randomAngle) * this.speed;
+		this.dy = Math.sin(randomAngle) * this.speed;
+		this.size = Math.random() * 5 + 3; // Random size between 3 and 8
+		this.life = 1; // Full life at start
+		this.alpha = 0.5; // Semi-transparent for smoke effect
+	}
+	
+	update() {
+		this.x += this.dx;
+		this.y += this.dy;
+		this.life -= 0.02; // Smoke particles will fade faster
+		this.alpha -= 0.02;
+	}
+	
+	draw(ctx) {
+		ctx.save();
+		ctx.globalAlpha = this.alpha;
+		ctx.fillStyle = "grey"; // Smoke color
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.size, 4, 5 * Math.PI);
+		ctx.fill();
+		ctx.restore();
+	}
+}
+
+// Emit muzzle and smoke particles
+function emitParticles(x, y, mainAngle) {
+	// Angle boundaries for the cone shape
+	const coneWidth = Math.PI / 6;  // The cone will be 1/6th of a circle (or 30 degrees wide)
+	const minAngle = mainAngle - coneWidth / 2;
+	const maxAngle = mainAngle + coneWidth / 2;
+	
+	// Emitting muzzle particles within a cone
+	let muzzleCount = Math.random() * 10 + 5;
+	for (let i = 0; i < muzzleCount; i++) {
+		const randomAngle = Math.random() * (maxAngle - minAngle) + minAngle;
+		const particle = new MuzzleParticle(x, y, randomAngle);
+		particles.push(particle);
+	}
+	
+	// Emitting smoke particles (unchanged)
+	let smokeCount = Math.random() * 5 + 3;  // Emit fewer smoke particles (3 to 8)
+	for (let i = 0; i < smokeCount; i++) {
+		const smoke = new SmokeParticle(x, y);
+		particles.push(smoke);
+	}
+}
+
+// When you call emitParticles, pass in the combined angle of the tank and cannon:
+// emitParticles(flashX, flashY, combinedAngle);
+
+
+// Update and draw particles (muzzle and smoke)
+function handleParticles(ctx) {
+	for (let i = particles.length - 1; i >= 0; i--) {
+		particles[i].update();
+		if (particles[i].life <= 0) {
+			particles.splice(i, 1);
+		} else {
+			particles[i].draw(ctx);
 		}
 	}
 }
-let droppedAmmo = [];
-
+// Animation loop
+function animateSnow() {
+	
+	for (const snowflake of snowflakes) {
+		snowflake.update();
+		snowflake.draw();
+	}
+	
+	requestAnimationFrame(animateSnow);
+}
+function spawnParticles(x, y) {
+	const numberOfParticles = Math.floor(Math.random() * 31) + 20;
+	for (let i = 0; i < numberOfParticles; i++) {
+		particles.push(new Particle(x, y));
+	}
+}
+function animateParticles(ctx) {
+	for (let i = 0; i < particles.length; i++) {
+		particles[i].update();
+		particles[i].draw(ctx);
+		if (particles[i].alpha <= 0) {
+			particles.splice(i, 1);
+			i--; // decrease index since we're removing an item
+		}
+	}
+}
+function drawBackgroundImage() {
+	ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); // This will stretch or shrink the image to fit the canvas
+}
+function createRocks(number) {
+	for (let i = 0; i < number; i++) {
+		const x = Math.random() * (canvas.width - rockImage.width); // Subtract image width to ensure the rock is fully visible
+		const y = Math.random() * (canvas.height - rockImage.height); // Subtract image height for the same reason
+		// You can keep the radius if you still need it for collision detection or other purposes
+		const radius = (Math.random() * 5) + 50; // gives random radius between 10 and 30
+		
+		rocks.push({ x, y, radius });
+	}
+}
+function drawRocks() {
+	for (let rock of rocks) {
+		ctx.drawImage(rockImage, rock.x, rock.y, rockImage.width, rockImage.height); // Draws the rock PNG
+	}
+}
+// Check if a point is inside a rectangle
+function isPointInRectangle(px, py, rectX, rectY, rectWidth, rectHeight, angle) {
+	// Translate the point relative to the rectangle's center
+	let translatedX = px - rectX;
+	let translatedY = py - rectY;
+	
+	// Rotate the point to align with the rectangle's orientation
+	let rotatedX = translatedX * Math.cos(-angle) - translatedY * Math.sin(-angle);
+	let rotatedY = translatedX * Math.sin(-angle) + translatedY * Math.cos(-angle);
+	
+	// Check if point lies within the rectangle boundaries
+	return Math.abs(rotatedX) < rectWidth / 2 && Math.abs(rotatedY) < rectHeight / 2;
+}
+// Check collision between a rectangle and circle
+function isRectangleCircleCollision(rectX, rectY, rectWidth, rectHeight, angle, circleX, circleY, circleRadius) {
+	// If circle's center is inside the rectangle, there's a collision
+	if (isPointInRectangle(circleX, circleY, rectX, rectY, rectWidth, rectHeight, angle)) {
+		return true;
+	}
+	
+	// Find the closest point on the rectangle to the circle's center
+	let closestX = Math.max(-rectWidth / 2, Math.min(circleX - rectX, rectWidth / 2));
+	let closestY = Math.max(-rectHeight / 2, Math.min(circleY - rectY, rectHeight / 2));
+	
+	// Rotate the closest point back to world coordinates
+	let worldClosestX = rectX + (closestX * Math.cos(angle) - closestY * Math.sin(angle));
+	let worldClosestY = rectY + (closestX * Math.sin(angle) + closestY * Math.cos(angle));
+	
+	// Check the distance from the closest point to the circle's center
+	let distanceX = worldClosestX - circleX;
+	let distanceY = worldClosestY - circleY;
+	
+	return (distanceX * distanceX + distanceY * distanceY) < (circleRadius * circleRadius);
+}
 // Game Loop
 function updateGameArea() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
+	//Input
 	handlePlayerMovement(); // Calculate potential movement first
 	
-	let leftTread = {
-		x: tank_cannon.x + Math.cos(tank.angle + Math.PI / 2) * (tank.width / 2 * treadOffsetFactor),
-		y: tank_cannon.y + Math.sin(tank.angle + Math.PI / 2) * (tank.width / 2 * treadOffsetFactor)
-	};
-	let rightTread = {
-		x: tank_cannon.x + Math.cos(tank.angle - Math.PI / 2) * (tank.width / 2 * treadOffsetFactor),
-		y: tank_cannon.y + Math.sin(tank.angle - Math.PI / 2) * (tank.width / 2 * treadOffsetFactor)
-	};
-	tankTrail.push({ left: leftTread, right: rightTread });
-	
-	while (tankTrail.length > 400) {
-		tankTrail.shift(); // Remove the oldest position
-	}
-	
-	if (keys[" "]) {
-		fireBullet();
-	}
-	
-	// if (keys["w"] || keys["s"]) {
-	// 	let potentialNewX = tank.x;
-	// 	let potentialNewY = tank.y;
-	//
-	// 	if (!checkTankEnemyCollision(tank, obstacle)) {
-	// 		// Only update tank position if there's no collision
-	// 		tank.x = potentialNewX;
-	// 		tank.y = potentialNewY;
-	// 	} else {
-	// 		console.log("Collision detected");
-	// 	}
-	// }
-	//
-	for (let enemy of enemies) {
-		enemy.update();
-		enemy.draw();
-		
-		if (checkTankEnemyCollision(tank, enemy)) {
-			tank.health -= 10;
-			addScore(100);
-			dropAmmo(enemy);
-			enemies.splice(enemies.indexOf(enemy), 1);
-		}
-		
-		for (let point of tankTrail) {
-			if (checkEnemyTrailCollision(enemy, point.left) || checkEnemyTrailCollision(enemy, point.right)) {
-				enemies.splice(enemies.indexOf(enemy), 1);
-				addScore(100);
-				break;
-			}
-		}
-	}
-	
-	displayScore();
-	pickUpAmmo();
+	//Drawing
+	drawBackgroundImage();
 	drawDroppedAmmo();
 	drawHealthBar();
 	drawMuzzleFlash();
 	drawTankTreadTrail();
-	drawObstacle();
+	drawRocks();
 	drawReloadingSpinner();
 	drawTankBody();
 	drawTankCannon();
+	drawTankTrails();
+	
+	//Collision
+	enemyCollision();
+
+	for (let rock of rocks) {
+		if (isRectangleCircleCollision(tank.x, tank.y, tank.width, tank.height, tank.angle, rock.x, rock.y, rock.radius)) {
+			console.log("Collision detected between:", { tank: tank, rock: rock });
+			tank_cannon.x = tank.x - 0.1;
+			tank_cannon.y = tank.y - 0.1;
+		}
+	}
+	
+	//Update
 	updateBullets();
+	
+	//Ui
+	displayScore();
 	displayAmmoUI();
+	
+	
+	//Misc
+	preventDuplicateKeyActions();
+	animateParticles(ctx);
+	pickUpAmmo();
 }
+
 function handlePlayerMovement() {
 	
 	// Cannon angle adjustment
@@ -206,27 +428,13 @@ function handlePlayerMovement() {
 	if (keys["ArrowUp"] || keys["w"]) {
 		tank.x = tank_cannon.x;
 		tank.y = tank_cannon.y;
-		
-		if(checkTankObstacleCollision(tank, obstacle)) {
-			tank_cannon.x = tank.x - 20;
-			tank_cannon.y = tank.y - 20;
-			return;
-		}
 		tank_cannon.x += Math.cos(tank.angle) * tank_cannon.dy;
 		tank_cannon.y += Math.sin(tank.angle) * tank_cannon.dy;
 	}
 	
 	if (keys["ArrowDown"] || keys["s"]) {
-		
 		tank.x = tank_cannon.x;
 		tank.y = tank_cannon.y;
-		
-		if(checkTankObstacleCollision(tank, obstacle)) {
-			tank_cannon.x = tank.x - 20;
-			tank_cannon.y = tank.y - 20;
-			return;
-		}
-		
 		tank_cannon.x -= Math.cos(tank.angle) * tank_cannon.dy; // note the '-='
 		tank_cannon.y -= Math.sin(tank.angle) * tank_cannon.dy; // note the '-='ssss
 	}
@@ -238,6 +446,10 @@ function handlePlayerMovement() {
 	
 	if (keys["d"]) {
 		tank.angle += tank.rotationSpeed;
+	}
+	
+	if (keys[" "]) {
+		fireBullet();
 	}
 	
 	if (keys["r"]) {
@@ -257,7 +469,6 @@ function handlePlayerMovement() {
 	tank_cannon.angle = Math.min(Math.max(tank_cannon.angle, MIN_CANNON_ANGLE), MAX_CANNON_ANGLE);
 }
 
-
 //Player Actions
 function dropAmmo(enemy) {
 	if (Math.random() < 0.4) {  // 20% chance to drop ammo
@@ -271,12 +482,6 @@ function dropAmmo(enemy) {
 			size: 10  // Adjust size if needed
 		});
 	}
-}
-function isColliding(rect1, rect2) {
-	return rect1.x < rect2.x + rect2.width &&
-		rect1.x + rect1.width > rect2.x &&
-		rect1.y < rect2.y + rect2.height &&
-		rect1.y + rect1.height > rect2.y;
 }
 function displayScore() {
 	ctx.font = "24px Arial"; // Set the font size and style
@@ -299,6 +504,62 @@ function pickUpAmmo() {
 function addScore(points) {
 	score += points;
 	// Optionally: Update the score on the game's HUD or wherever you want to display it
+}
+function enemyCollision() {
+	for (let enemy of enemies) {
+		enemy.update();
+		enemy.draw();
+		
+		if (checkTankEnemyCollision(tank, enemy)) {
+			tank.health -= 10;
+			spawnParticles(enemy.x, enemy.y);
+			dropAmmo(enemy);
+			enemies.splice(enemies.indexOf(enemy), 1);
+			addScore(100);
+		}
+		
+		// for (let point of tankTrail) {
+		// 	if (checkEnemyTrailCollision(enemy, point.left) || checkEnemyTrailCollision(enemy, point.right)) {
+		// 		spawnParticles(enemy.x, enemy.y);
+		// 		enemies.splice(enemies.indexOf(enemy), 1);
+		// 		addScore(100);
+		// 	}
+		// }
+	}
+}
+function startEnemyEmitter() {
+	enemyEmitter = setInterval(() => {
+		let x, y;
+		const size = Math.random() * 20 + 40; // Random size between 10 and 50
+		const speed = Math.random() * 2 + 1; // Random speed between 1 and 3
+		
+		const side = Math.floor(Math.random() * 4); // Choose a random side: 0 = top, 1 = right, 2 = bottom, 3 = left
+		
+		switch (side) {
+			case 0: // top
+				x = Math.random() * canvas.width;
+				y = 0 - size; // start slightly outside the canvas
+				break;
+			case 1: // right
+				x = canvas.width + size; // start slightly outside the canvas
+				y = Math.random() * canvas.height;
+				break;
+			case 2: // bottom
+				x = Math.random() * canvas.width;
+				y = canvas.height + size; // start slightly outside the canvas
+				break;
+			case 3: // left
+				x = 0 - size; // start slightly outside the canvas
+				y = Math.random() * canvas.height;
+				break;
+		}
+		
+		enemies.push(new Enemy(x, y, size, size, speed));
+	}, 150); // Spawning an enemy every 0.3 seconds
+}
+function destroyEnemyEmitter() {
+	clearInterval(enemyEmitter);
+	enemyEmitter = null;
 }
 
 //Collision Detection
@@ -328,12 +589,6 @@ function checkTankEnemyCollision(tank, enemy) {
 		tank_cannon.y < enemy.y + enemy.height &&
 		tank_cannon.y + tank.height > enemy.y;
 }
-function checkTankObstacleCollision(tank, obstacle) {
-	return tank_cannon.x < obstacle.x + obstacle.width &&
-		tank_cannon.x + tank.width > obstacle.x &&
-		tank_cannon.y < obstacle.y + obstacle.height &&
-		tank_cannon.y + tank.height > obstacle.y;
-}
 
 //Drawing Functions
 function roundedRect(ctx, x, y, width, height, radius) {
@@ -347,22 +602,28 @@ function roundedRect(ctx, x, y, width, height, radius) {
 	ctx.fill();
 	ctx.stroke();
 }
+// Modified drawMuzzleFlash function
 function drawMuzzleFlash() {
 	if (tank_cannon.muzzleFlash) {
 		const combinedAngle = tank.angle + tank_cannon.angle;
 		const flashX = tank_cannon.x + (tank_cannon.size/1.8 + arrowLength) * Math.cos(combinedAngle);
 		const flashY = tank_cannon.y + (tank_cannon.size/1.8 + arrowLength) * Math.sin(combinedAngle);
 		
+		emitParticles(flashX, flashY, combinedAngle);  // Emit particles when there's a muzzle flash
+		
 		ctx.save();
 		ctx.beginPath();
 		
-		const gradient = ctx.createRadialGradient(flashX, flashY, 1, flashX, flashY, 15);  // 15 is the radius of the muzzle flash, adjust as needed
+		const gradient = ctx.createRadialGradient(flashX, flashY, 1, flashX, flashY, 1);
 		gradient.addColorStop(0, 'red');
-		gradient.addColorStop(1, 'rgba(255,255,0,0)');  // Transparent at the outer edgee
+		gradient.addColorStop(1, 'rgba(255,255,0,0)');
 		
 		ctx.fillStyle = gradient;
-		ctx.arc(flashX, flashY, 15, 0, 2 * Math.PI);  // 15 is the radius of the muzzle flash, adjust as needed
+		ctx.arc(flashX, flashY, 15, 0, 2 * Math.PI);
 		ctx.fill();
+		
+		handleParticles(ctx);  // Draw the particles
+		
 		ctx.restore();
 	}
 }
@@ -424,11 +685,11 @@ function drawTankCannon() {
 	roundedRect(ctx, -tank_cannon.size/2, -tank_cannon.size/2, tank_cannon.size, tank_cannon.size, 10);  // Adjust the radius as needed
 	
 	// Drawing the elongated cannon part
-	const arrowLength = 40;
-	const arrowWidth = 5;
+	const arrowLength = 38;
+	const arrowHeight = 10;
 	ctx.fillStyle = "rgba(73,96,78,1)";
 	// Assuming you want rounded corners for the cannon's elongated part, you can adjust the radius as needed
-	roundedRect(ctx, tank_cannon.size/2, -arrowWidth/2, arrowLength, arrowWidth, 2);
+	roundedRect(ctx, tank_cannon.size/2, -arrowHeight/2, arrowLength, arrowHeight, 2);
 	
 	ctx.restore();
 }
@@ -436,7 +697,7 @@ function drawTankTreadTrail() {
 	for (let i = 0; i < tankTrail.length; i++) {
 		let alpha = (i + 1) / tankTrail.length;
 		
-		ctx.fillStyle = `rgba(165, 138, 112, ${alpha})`;  // Set the fill color with decreasing opacity
+		ctx.fillStyle = `rgba(208, 213, 215, ${alpha})`;  // Set the fill color with decreasing opacity
 		let treads = tankTrail[i];
 		
 		// Drawing left tread
@@ -454,10 +715,6 @@ function drawDroppedAmmo() {
 	}
 	ctx.restore();
 }
-function drawObstacle() {
-	ctx.fillStyle = obstacle.color;
-	ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-}
 function drawHealthBar() {
 	const barWidth = 200;
 	const barHeight = 20;
@@ -472,6 +729,21 @@ function drawHealthBar() {
 	const healthPercentage = tank.health / tank.maxHealth;
 	ctx.fillStyle = tank.health > 70 ? "green" : tank.health > 30 ? "yellow" : "red";
 	ctx.fillRect(x, y, barWidth * healthPercentage, barHeight);
+}
+function drawTankTrails() {
+	let leftTread = {
+		x: tank_cannon.x + Math.cos(tank.angle + Math.PI / 2) * (tank.width / 2 * treadOffsetFactor),
+		y: tank_cannon.y + Math.sin(tank.angle + Math.PI / 2) * (tank.width / 2 * treadOffsetFactor)
+	};
+	let rightTread = {
+		x: tank_cannon.x + Math.cos(tank.angle - Math.PI / 2) * (tank.width / 2 * treadOffsetFactor),
+		y: tank_cannon.y + Math.sin(tank.angle - Math.PI / 2) * (tank.width / 2 * treadOffsetFactor)
+	};
+	tankTrail.push({ left: leftTread, right: rightTread });
+	
+	while (tankTrail.length > 400) {
+		tankTrail.shift(); // Remove the oldest position
+	}
 }
 
 // Ammo Management
@@ -522,11 +794,6 @@ function updateBullets() {
 		let potentialNewX = bullets[i].x + bullets[i].dx;
 		let potentialNewY = bullets[i].y + bullets[i].dy;
 		
-		if (isColliding({ x: potentialNewX, y: potentialNewY, width: bullets[i].size, height: bullets[i].size * 2 }, obstacle)) {
-			bullets.splice(i, 1);  // Remove bullet if it hits obstacle
-			continue;
-		}
-		
 		bullets[i].x = potentialNewX;
 		bullets[i].y = potentialNewY;
 		
@@ -541,8 +808,10 @@ function updateBullets() {
 		for (let j = enemies.length - 1; j >= 0; j--) {
 			if (checkBulletEnemyCollision(bullets[i], enemies[j])) {
 				dropAmmo(enemies[j]); // Drop ammo
+				spawnParticles(enemies[j].x, enemies[j].y); // Spawn particles
 				enemies.splice(j, 1); // Remove the enemy
 				bullets.splice(i, 1); // Remove the bullet
+				
 				addScore(150); // Add score
 				break;
 			}
@@ -583,51 +852,52 @@ function switchAmmoType() {
 	let nextIndex = (currentIndex + 1) % ammoTypes.length;
 	ammo.currentType = ammoTypes[nextIndex];
 }
-
-
-document.addEventListener('keydown', function (e) {
-	keys[e.key] = true;
-});
-
-document.addEventListener('keyup', function(event) {
-	keys[event.key] = false;
-});
-
-document.addEventListener("keydown", function (e) {
-	keys[e.key] = true;
-});
-
-document.addEventListener("keyup", function (e) {
-	keys[e.key] = false;
-});
-
-setInterval(() => {
-	let x, y;
-	const size = Math.random() * 20 + 10; // Random size between 10 and 50
-	const speed = Math.random() * 2 + 1; // Random speed between 1 and 3
+function preventDuplicateKeyActions() {
+	document.addEventListener('keydown', function (e) {
+		keys[e.key] = true;
+	});
 	
-	const side = Math.floor(Math.random() * 4); // Choose a random side: 0 = top, 1 = right, 2 = bottom, 3 = left
+	document.addEventListener('keyup', function(event) {
+		keys[event.key] = false;
+	});
 	
-	switch (side) {
-		case 0: // top
-			x = Math.random() * canvas.width;
-			y = 0 - size; // start slightly outside the canvas
-			break;
-		case 1: // right
-			x = canvas.width + size; // start slightly outside the canvas
-			y = Math.random() * canvas.height;
-			break;
-		case 2: // bottom
-			x = Math.random() * canvas.width;
-			y = canvas.height + size; // start slightly outside the canvas
-			break;
-		case 3: // left
-			x = 0 - size; // start slightly outside the canvas
-			y = Math.random() * canvas.height;
-			break;
+	document.addEventListener("keydown", function (e) {
+		keys[e.key] = true;
+	});
+	
+	document.addEventListener("keyup", function (e) {
+		keys[e.key] = false;
+	});
+}
+function startSnowEmitter() {
+	// Initialize snowflakes
+	for (let i = 0; i < numberOfSnowflakes; i++) {
+		snowflakes.push(new Snowflake());
 	}
-	
-	enemies.push(new Enemy(x, y, size, size, speed));
-}, 150); // Spawning an enemy every 0.3 seconds
+	animateSnow()
+}
 
-setInterval(updateGameArea, 5);
+//Wave Management
+startEnemyEmitter();
+startSnowEmitter();
+createRocks(1);
+
+setInterval(updateGameArea, 10);
+
+let hr = document.createElement("hr");
+document.body.appendChild(hr);
+
+let clear_enemies = document.createElement("button");
+clear_enemies.innerHTML = "Clear enemies";
+document.body.appendChild(clear_enemies);
+clear_enemies.addEventListener("click", function() {
+	enemies = [];
+	destroyEnemyEmitter()
+});
+
+let start_wave = document.createElement("button");
+start_wave.innerHTML = "Start Wave";
+document.body.appendChild(start_wave);
+start_wave.addEventListener("click", function() {
+	startEnemyEmitter()
+})
