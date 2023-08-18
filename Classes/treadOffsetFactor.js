@@ -1,0 +1,1 @@
+export let treadOffsetFactor = 0.50;
