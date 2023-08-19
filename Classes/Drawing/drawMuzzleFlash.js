@@ -1,4 +1,3 @@
-// Modified drawMuzzleFlash function
 import {emitParticles} from "../Emitters/emitParticles.js";
 import {ctx} from "../Canvas/ctx.js";
 import {handleParticles} from "../Emitters/handleParticles.js";
@@ -21,11 +20,8 @@ export function drawMuzzleFlash() {
 		ctx.save();
 		ctx.beginPath();
 		
-		const gradient = ctx.createRadialGradient(flashX, flashY, 1, flashX, flashY, 1);
-		gradient.addColorStop(0, selectedAmmo.color1);
-		gradient.addColorStop(1, selectedAmmo.color2);
-		
-		ctx.fillStyle = gradient;
+		// Use a solid fill style instead of gradient
+		ctx.fillStyle = selectedAmmo.color1;
 		ctx.arc(flashX, flashY, 15, 0, 2 * Math.PI);
 		ctx.fill();
 		

@@ -49,7 +49,7 @@ export class Particle {
 		}
 	}
 	
-	draw(ctx) {
+	draw() {
 		ctx.save();
 		// Glowing effect
 		ctx.shadowColor = this.selectedAmmo.color1;
