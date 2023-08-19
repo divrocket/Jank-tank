@@ -1,0 +1,1 @@
+export let numberOfDustParticles = 200;

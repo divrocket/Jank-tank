@@ -1,6 +1,7 @@
 import { particles } from './particles.js';
+import { ctx } from "./ctx.js";
 
-export function animateParticles(ctx) {
+export function animateParticles() {
 	for (let i = 0; i < particles.length; i++) {
 		particles[i].update();
 		particles[i].draw(ctx);

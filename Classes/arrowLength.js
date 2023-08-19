@@ -1,1 +1,2 @@
-export let arrowLength = 40;
+export let arrowLength = 38;
+export let arrowHeight = 10;

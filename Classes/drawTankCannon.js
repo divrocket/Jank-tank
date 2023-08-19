@@ -11,15 +11,15 @@ export function drawTankCannon() {
 	ctx.rotate(tank.angle + tank_cannon.angle);
 	
 	// Drawing the cannon base
-	ctx.fillStyle = "rgba(73,96,78,1)";
-	ctx.strokeStyle = "black"; // Stroke color
-	ctx.lineWidth = 2; // Line width for the stroke
-	roundedRect(ctx, -tank_cannon.size / 2, -tank_cannon.size / 2, tank_cannon.size, tank_cannon.size, 10);  // Adjust the radius as needed
+	ctx.fillStyle = "rgb(148,58,58)";
+	ctx.strokeStyle = "#481c1c"; // Stroke color
+	ctx.lineWidth = 3; // Line width for the stroke
+	roundedRect(ctx, -tank_cannon.size / 2, -tank_cannon.size / 2, tank_cannon.size, tank_cannon.size, 25);  // Adjust the radius as needed
 	
 	// Drawing the elongated cannon part
-	const arrowLength = 38;
-	const arrowHeight = 10;
-	ctx.fillStyle = "rgba(73,96,78,1)";
+	const arrowLength = 35;
+	const arrowHeight = 15;
+	ctx.fillStyle = "rgb(148,58,58)";
 	// Assuming you want rounded corners for the cannon's elongated part, you can adjust the radius as needed
 	roundedRect(ctx, tank_cannon.size / 2, -arrowHeight / 2, arrowLength, arrowHeight, 2);
 	

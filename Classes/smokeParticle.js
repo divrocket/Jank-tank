@@ -6,7 +6,7 @@ export class SmokeParticle {
 		const randomAngle = Math.random() * (Math.PI * 2);
 		this.dx = Math.cos(randomAngle) * this.speed;
 		this.dy = Math.sin(randomAngle) * this.speed;
-		this.size = Math.random() * 5 + 3; // Random size between 3 and 8
+		this.size = Math.random() * 5 + 1; // Random size between 3 and 8
 		this.life = 1; // Full life at start
 		this.alpha = 0.5; // Semi-transparent for smoke effect
 	}
@@ -19,9 +19,14 @@ export class SmokeParticle {
 	}
 	
 	draw(ctx) {
+		function getRandomColor() {
+			const colors = ["red", "orange", "yellow", "grey", 'black', "red"];
+			return colors[Math.floor(Math.random() * colors.length)];
+		}
+		
 		ctx.save();
 		ctx.globalAlpha = this.alpha;
-		ctx.fillStyle = "grey"; // Smoke color
+		ctx.fillStyle = getRandomColor();
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.size, 4, 5 * Math.PI);
 		ctx.fill();

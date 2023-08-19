@@ -43,3 +43,8 @@ export let ammo = {
 		reloading: false
 	}
 };
+export function addAmmo(type, count) {
+	if (ammo[type]) {
+		ammo[type].count += count;
+	}
+}

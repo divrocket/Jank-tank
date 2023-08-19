@@ -2,7 +2,7 @@ import {ctx} from "./ctx.js";
 import {rocks} from "./rocks.js";
 
 let rockImage = new Image();
-rockImage.src = 'assets/tree_assets/Trees_texture_shadow_dark/Snow_christmass_tree1.png';
+rockImage.src = 'assets/Rock2_grass_shadow1.png';
 
 export function drawRocks() {
 	for (let rock of rocks) {

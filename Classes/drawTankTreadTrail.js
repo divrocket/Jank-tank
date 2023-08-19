@@ -4,8 +4,8 @@ import {tankTrail} from "./tankTrail.js";
 export function drawTankTreadTrail() {
 	for (let i = 0; i < tankTrail.length; i++) {
 		let alpha = (i + 1) / tankTrail.length;
-		
-		ctx.fillStyle = `rgba(208, 213, 215, ${alpha})`;  // Set the fill color with decreasing opacity
+
+		ctx.fillStyle = `rgba(220, 169, 127, ${alpha})`;  // Set the fill color with decreasing opacity
 		let treads = tankTrail[i];
 		
 		// Drawing left tread
