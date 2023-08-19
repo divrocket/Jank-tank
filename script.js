@@ -1,28 +1,28 @@
-import {canvas, ctx} from "./Classes/ctx.js";
-import {updateBullets} from "./Classes/updateBullets.js";
-import {displayAmmoUI} from "./Classes/displayAmmoUI.js";
-import {preventDuplicateKeyActions} from "./Classes/preventDuplicateKeyActions.js";
-import {startSnowEmitter} from "./Classes/startSnowEmitter.js";
-import {animateParticles} from "./Classes/animateParticles.js";
-import {drawBackgroundImage} from "./Classes/drawBackgroundImage.js";
-import {createRocks} from "./Classes/createRocks.js";
-import {drawRocks} from "./Classes/drawRocks.js";
-import {startEnemyEmitter} from "./Classes/startEnemyEmitter.js";
-import {enemyCollision} from "./Classes/enemyCollision.js";
-import {pickUpAmmo} from "./Classes/pickUpAmmo.js";
-import {displayScore} from "./Classes/displayScore.js";
-import {drawMuzzleFlash} from "./Classes/drawMuzzleFlash.js";
-import {drawTankBody} from "./Classes/drawTankBody.js";
-import {drawReloadingSpinner} from "./Classes/drawReloadingSpinner.js";
-import {drawTankCannon} from "./Classes/drawTankCannon.js";
-import {drawTankTreadTrail} from "./Classes/drawTankTreadTrail.js";
-import {drawDroppedAmmo} from "./Classes/drawDroppedAmmo.js";
-import {drawHealthBar} from "./Classes/drawHealthBar.js";
-import {drawTankTrails} from "./Classes/drawTankTrails.js";
-import {rockCollision} from "./Classes/rockCollision.js";
-import {handlePlayerMovement} from "./Classes/handlePlayerMovement.js";
-import {buildUX} from "./Classes/buildUX.js";
-import {startDustEmitter} from "./Classes/startDustEmitter.js";
+import {canvas, ctx} from "./Classes/Canvas/ctx.js";
+import {updateBullets} from "./Classes/Player/Actions/updateBullets.js";
+import {displayAmmoUI} from "./Classes/Interfaces/displayAmmoUI.js";
+import {preventDuplicateKeyActions} from "./Classes/Player/preventDuplicateKeyActions.js";
+import {startSnowEmitter} from "./Classes/Emitters/startSnowEmitter.js";
+import {animateParticles} from "./Classes/Animation/animateParticles.js";
+import {drawBackgroundImage} from "./Classes/Drawing/drawBackgroundImage.js";
+import {createRocks} from "./Classes/Drawing/createRocks.js";
+import {drawRocks} from "./Classes/Drawing/drawRocks.js";
+import {startEnemyEmitter} from "./Classes/Emitters/startEnemyEmitter.js";
+import {enemyCollision} from "./Classes/Collision/enemyCollision.js";
+import {pickUpAmmo} from "./Classes/Player/Actions/pickUpAmmo.js";
+import {displayScore} from "./Classes/Interfaces/displayScore.js";
+import {drawMuzzleFlash} from "./Classes/Drawing/drawMuzzleFlash.js";
+import {drawTankBody} from "./Classes/Drawing/drawTankBody.js";
+import {drawReloadingSpinner} from "./Classes/Drawing/drawReloadingSpinner.js";
+import {drawTankCannon} from "./Classes/Drawing/drawTankCannon.js";
+import {drawTankTreadTrail} from "./Classes/Drawing/drawTankTreadTrail.js";
+import {drawDroppedAmmo} from "./Classes/Drawing/drawDroppedAmmo.js";
+import {drawHealthBar} from "./Classes/Drawing/drawHealthBar.js";
+import {drawTankTrails} from "./Classes/Drawing/drawTankTrails.js";
+import {rockCollision} from "./Classes/Collision/rockCollision.js";
+import {handlePlayerMovement} from "./Classes/Player/handlePlayerMovement.js";
+import {buildUX} from "./Classes/Interfaces/buildUX.js";
+import {startDustEmitter} from "./Classes/Emitters/startDustEmitter.js";
 
 // Game Loop
 function updateGameArea() {
@@ -39,6 +39,7 @@ function updateGameArea() {
 	drawRocks();
 	drawReloadingSpinner();
 	animateParticles();
+	
 	//Collision
 	enemyCollision();
 	drawTankBody();
@@ -53,10 +54,7 @@ function updateGameArea() {
 	displayAmmoUI();
 	
 	//Misc
-
 	pickUpAmmo();
-	
-
 	rockCollision();
 	
 	//Input
