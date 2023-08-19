@@ -1,0 +1,1 @@
+export const numberOfSnowflakes = 80 ; // Adjust for more or less snow
