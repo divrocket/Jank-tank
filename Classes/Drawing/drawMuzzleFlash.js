@@ -5,8 +5,12 @@ import {handleParticles} from "../Emitters/handleParticles.js";
 import {tank_cannon} from "../Config/tank_cannon.js";
 import {tank} from "../Config/tank.js";
 import {arrowLength} from "../Config/arrowLength.js";
+import {ammo} from "../Config/ammo.js";
 
 export function drawMuzzleFlash() {
+	
+	let selectedAmmo = ammo[ammo.currentType];
+	
 	if (tank_cannon.muzzleFlash) {
 		const combinedAngle = tank.angle + tank_cannon.angle;
 		const flashX = tank_cannon.x + (tank_cannon.size / 1.8 + arrowLength) * Math.cos(combinedAngle);
@@ -18,8 +22,8 @@ export function drawMuzzleFlash() {
 		ctx.beginPath();
 		
 		const gradient = ctx.createRadialGradient(flashX, flashY, 1, flashX, flashY, 1);
-		gradient.addColorStop(0, 'red');
-		gradient.addColorStop(1, 'rgba(255,255,0,0)');
+		gradient.addColorStop(0, selectedAmmo.color1);
+		gradient.addColorStop(1, selectedAmmo.color2);
 		
 		ctx.fillStyle = gradient;
 		ctx.arc(flashX, flashY, 15, 0, 2 * Math.PI);

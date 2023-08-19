@@ -3,7 +3,7 @@ import {canvas} from "../Canvas/ctx.js";
 export let tank_cannon = {
 	x: canvas.width / 2,
 	y: canvas.height - 50,
-	size: 50,
+	size: 45,
 	dx: 3,
 	dy: 3,
 	angle: 0,  // Set to 0 so the cannon starts at the front

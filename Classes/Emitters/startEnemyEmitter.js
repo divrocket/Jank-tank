@@ -32,6 +32,6 @@ export function startEnemyEmitter() {
 		}
 		
 		enemies.push(new Enemy(x, y, size, size, speed));
-	}, 3000); // Spawning an enemy every 0.3 seconds
+	}, 50); // Spawning an enemy every 0.3 seconds
 }
 

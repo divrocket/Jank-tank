@@ -1,4 +1,5 @@
 import {ctx} from "../Canvas/ctx.js";
+import {ammo} from "../Config/ammo.js";
 
 export class SmokeParticle {
 	constructor(x, y) {
@@ -22,14 +23,16 @@ export class SmokeParticle {
 	
 	draw(ctx) {
 		
+		let selectedAmmo = ammo[ammo.currentType];
+		
 		ctx.save();
 		function getRandomColor() {
-			const colors = ["#00ffff"];
+			const colors = [selectedAmmo.color1];
 			return colors[Math.floor(Math.random() * colors.length)];
 		}
 		
 		// Glowing effect
-		ctx.shadowColor = "#00ffff";
+		ctx.shadowColor = selectedAmmo.color1;
 		ctx.shadowBlur = 6;
 		
 	

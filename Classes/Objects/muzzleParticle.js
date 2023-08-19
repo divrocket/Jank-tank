@@ -1,4 +1,5 @@
 import {ctx} from "../Canvas/ctx.js";
+import {ammo} from "../Config/ammo.js";
 
 export class MuzzleParticle {
 	constructor(x, y, angle) {
@@ -20,18 +21,16 @@ export class MuzzleParticle {
 	
 	// Function to get a random color among shades of red, yellow, and orange
 	getRandomColor() {
-		const colors = [
-			`rgba(${255}, 0, ${Math.floor(Math.random() * 56)}, 1)`, // Red to Orange shades
-			`rgba(${255}, 0, ${Math.floor(Math.random() * 156) + 100}, 1)`, // Yellow shades
-			`rgba(${255 - Math.floor(Math.random() * 56)}, 0, ${64 + Math.floor(Math.random() * 56)}, 1)` // Orange shades
-		];
+		let selectedAmmo = ammo[ammo.currentType];
+		const colors = [selectedAmmo.color1, selectedAmmo.color2]
 		return colors[Math.floor(Math.random() * colors.length)];
 	}
 	
 	draw(ctx) {
+		let selectedAmmo = ammo[ammo.currentType];
 		ctx.save();
 		// Glowing effect
-		ctx.shadowColor = "#00ffff";
+		ctx.shadowColor = selectedAmmo.color1;
 		ctx.shadowBlur = 12;
 		ctx.globalAlpha = this.alpha;
 		ctx.fillStyle = this.getRandomColor();  // Using the random color function

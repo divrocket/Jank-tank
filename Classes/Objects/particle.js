@@ -1,4 +1,5 @@
 import {ctx} from "../Canvas/ctx.js";
+import {ammo} from "../Config/ammo.js";
 
 export class Particle {
 	constructor(x, y) {
@@ -12,9 +13,9 @@ export class Particle {
 		this.bounceFactor = 0.1;
 		this.alpha = 1;
 		this.groundLevel = (this.y - 30) + (Math.random() * 200 + 10);
-		
+		this.selectedAmmo = ammo[ammo.currentType];
 		this.colors = [
-			`#07ff00`,
+			this.selectedAmmo.color1,
 		];
 		this.color = this.colors[Math.floor(Math.random() * this.colors.length)]; // Randomly select a color
 		
@@ -51,7 +52,7 @@ export class Particle {
 	draw(ctx) {
 		ctx.save();
 		// Glowing effect
-		ctx.shadowColor = "#07ff00";
+		ctx.shadowColor = this.selectedAmmo.color1;
 		ctx.shadowBlur = 6;
 		ctx.globalAlpha = this.alpha;
 		ctx.fillStyle = this.color;

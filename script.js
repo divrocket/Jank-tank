@@ -68,8 +68,8 @@ const init = async () => {
 		updateGameArea()
 	}, 10);
 	startEnemyEmitter();
-	startSnowEmitter();
-	startDustEmitter();
+	// startSnowEmitter();
+	// startDustEmitter();
 	createRocks(4);
 	buildUX();
 };
