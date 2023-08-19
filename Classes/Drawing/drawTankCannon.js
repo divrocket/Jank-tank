@@ -7,6 +7,10 @@ import {ammo} from "../Config/ammo.js";
 export function drawTankCannon() {
 	ctx.save();
 	
+	// Drawing the elongated cannon part
+	const arrowLength = 40;
+	const arrowHeight = 12;
+	
 	let selectedAmmo = ammo[ammo.currentType];
 	
 	// Positioning the cannon based on the tank's coordinates and rotation
@@ -16,17 +20,13 @@ export function drawTankCannon() {
 	
 	// Drawing the cannon base
 	ctx.fillStyle = selectedAmmo.color2
-	ctx.strokeStyle = selectedAmmo.color1; // Stroke color
-	ctx.lineWidth = 3; // Line width for the stroke
-	roundedRect(ctx, -tank_cannon.size / 2, -tank_cannon.size / 2, tank_cannon.size, tank_cannon.size, 16);  // Adjust the radius as needed
+	ctx.strokeStyle = selectedAmmo.color1;
+	ctx.lineWidth = 3;
+	roundedRect(ctx, -tank_cannon.size / 2, -tank_cannon.size / 2, tank_cannon.size, tank_cannon.size, 10);
 
-	// Drawing the elongated cannon part
-	const arrowLength = 40;
-	const arrowHeight = 12;
+
 	ctx.fillStyle = selectedAmmo.color2;
 	ctx.strokeStyle = selectedAmmo.color1;
-	
-	// Assuming you want rounded corners for the cannon's elongated part, you can adjust the radius as needed
 	roundedRect(ctx, tank_cannon.size / 2, -arrowHeight / 2, arrowLength, arrowHeight, 3);
 	
 	// // Drawing the cannon muzzle

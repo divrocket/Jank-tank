@@ -1,0 +1,7 @@
+#statsContainer {
+    max-height: 300px;
+    color: #fff;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}

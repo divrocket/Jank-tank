@@ -1,6 +1,6 @@
 export let tank = {
 	width: 90,
-	height: 65,
+	height: 60,
 	angle: 4.7,
 	rotationSpeed: 0.03,
 	health: 100,

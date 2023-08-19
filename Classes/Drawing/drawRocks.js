@@ -2,7 +2,7 @@ import {ctx} from "../Canvas/ctx.js";
 import {rocks} from "../CollectionManagement/rocks.js";
 
 let rockImage = new Image();
-rockImage.src = 'assets/Asteroid Brown.png';
+rockImage.src = 'Assets/Graphics/Asteroid Brown.png';
 
 export function drawRocks() {
 	for (let rock of rocks) {

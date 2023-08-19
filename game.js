@@ -2,7 +2,6 @@ import {canvas, ctx} from "./Classes/Canvas/ctx.js";
 import {updateBullets} from "./Classes/Player/Actions/updateBullets.js";
 import {displayAmmoUI} from "./Classes/Interfaces/displayAmmoUI.js";
 import {preventDuplicateKeyActions} from "./Classes/Player/preventDuplicateKeyActions.js";
-import {startSnowEmitter} from "./Classes/Emitters/startSnowEmitter.js";
 import {animateParticles} from "./Classes/Animation/animateParticles.js";
 import {drawBackgroundImage} from "./Classes/Drawing/drawBackgroundImage.js";
 import {createRocks} from "./Classes/Drawing/createRocks.js";
@@ -22,12 +21,15 @@ import {drawTankTrails} from "./Classes/Drawing/drawTankTrails.js";
 import {rockCollision} from "./Classes/Collision/rockCollision.js";
 import {handlePlayerMovement} from "./Classes/Player/handlePlayerMovement.js";
 import {buildUX} from "./Classes/Interfaces/buildUX.js";
-import {startDustEmitter} from "./Classes/Emitters/startDustEmitter.js";
+import {drawStatsToPage} from "./Classes/Drawing/drawProfiler.js";
+
+// import {startDustEmitter} from "./Classes/Emitters/startDustEmitter.js";
+// import {startSnowEmitter} from "./Classes/Emitters/startSnowEmitter.js";
+
 
 // Game Loop
 function updateGameArea() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
 	preventDuplicateKeyActions();
 	
 	//Drawing
@@ -36,6 +38,7 @@ function updateGameArea() {
 	drawHealthBar();
 	drawMuzzleFlash();
 	drawTankTreadTrail();
+	drawTankTrails();
 	drawRocks();
 	drawReloadingSpinner();
 	animateParticles();
@@ -44,9 +47,8 @@ function updateGameArea() {
 	enemyCollision();
 	drawTankBody();
 	drawTankCannon();
-	drawTankTrails();
 	
-	//Update
+	//Update wd
 	updateBullets();
 	
 	//Ui
@@ -58,15 +60,16 @@ function updateGameArea() {
 	rockCollision();
 	
 	//Input
-	handlePlayerMovement(); // Calculate potential movement first
-	
+	handlePlayerMovement(); // Calculate potential movement firs
 }
 
 const init = async () => {
 	setInterval(() => {
 		//Game Loop Interval
 		updateGameArea()
+		drawStatsToPage();
 	}, 10);
+	
 	startEnemyEmitter();
 	// startSnowEmitter();
 	// startDustEmitter();

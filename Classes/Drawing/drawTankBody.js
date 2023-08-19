@@ -23,20 +23,20 @@ export function drawTankBody() {
 	// Glowing effect
 	ctx.shadowColor = selectedAmmo.color2
 	ctx.shadowBlur = 6;
-	//
-	// // Front Armor
+	
+	// Front Armor
 	// ctx.fillStyle = "#5590ab"
 	// roundedRect(ctx, left.x + 60, left.y - 35.5, 20, 70, 5);
-	//
-	// // Back Armor
+
+	// Back Armor
 	// ctx.fillStyle = "#00ffff"
 	// roundedRect(ctx, right.x - 95, right.y - 35, 40, 70, 4);
-	//
-	// // Left Armor
+
+	// Left Armor
 	// ctx.fillStyle = "#5590ab"
 	// roundedRect(ctx, front.x - tank.width / 2 - 8, front.y - 7, 45, 15, 7);
-	//
-	// // Right Armor
+
+	// Right Armor
 	// ctx.fillStyle = "#5590ab"
 	// roundedRect(ctx, back.x - tank.width / 2 - 8, back.y - 8, 45, 15, 7);
 
@@ -48,11 +48,11 @@ export function drawTankBody() {
 	ctx.shadowBlur = 10;
 	
 	// Upper Deck
-	ctx.fillStyle = "#ffffff"
+	ctx.fillStyle = selectedAmmo.color1
 	roundedRect(ctx, -tank.width / 3.4, (-tank.height / 4) - 5, (tank.width / 2) + 10, (tank.height / 2) + 10, 20);
 	
-	//Remove the glow effect
+	// Remove the glow effect
 	ctx.shadowBlur = 0;
 	
-	ctx.restore(); // Restores the canvas state
+	ctx.restore();
 }

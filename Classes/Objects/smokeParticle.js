@@ -7,10 +7,11 @@ export class SmokeParticle {
 		this.y = y;
 		this.speed = Math.random() * 0.5 + 0.5; // Slower speed, between 0.5 and 1
 		const randomAngle = Math.random() * (Math.PI * 2);
+		
 		this.dx = Math.cos(randomAngle) * this.speed;
 		this.dy = Math.sin(randomAngle) * this.speed;
 		this.size = Math.random() * 5 + 1; // Random size between 3 and 8
-		this.life = 1; // Full life at start
+		this.life = Math.random() * 0.8 + 0.2;  // Life between 0.2 and 1 second
 		this.alpha = 0.5; // Semi-transparent for smoke effect
 	}
 	

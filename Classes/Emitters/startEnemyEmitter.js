@@ -30,7 +30,7 @@ export function startEnemyEmitter() {
 				y = Math.random() * canvas.height;
 				break;
 		}
-		if (enemies.length > 20) return;
+		if (enemies.length > 200) return;
 		enemies.push(new Enemy(x, y, size, size, speed));
 	}, 50); // Spawning an enemy every 0.3 seconds
 }
