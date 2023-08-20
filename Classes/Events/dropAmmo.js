@@ -1,9 +1,9 @@
-//Player Actions
 import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
 import {ammo} from "../Config/ammo.js";
+import {tankTrail} from "../CollectionManagement/tankTrail.js";
 
 export function dropAmmo(enemy) {
-	if (Math.random() < 0.4) {  // 20% chance to drop ammo
+	if (Math.random() < 0.4) {
 		const ammoTypes = Object.keys(ammo).filter(type => type !== 'currentType');
 		const dropType = ammoTypes[Math.floor(Math.random() * ammoTypes.length)];
 		
@@ -11,7 +11,11 @@ export function dropAmmo(enemy) {
 			x: enemy.x,
 			y: enemy.y,
 			type: dropType,
-			size: 10  // Adjust size if needed
+			size: 10
 		});
+		
+		while (droppedAmmo.length > 10) {
+			droppedAmmo.shift(); // Remove the oldest position
+		}
 	}
 }

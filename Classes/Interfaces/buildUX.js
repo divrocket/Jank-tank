@@ -1,6 +1,6 @@
 import {enemies} from "../CollectionManagement/enemies.js";
 import {destroyEnemyEmitter} from "./destroyEnemyEmitter.js";
-import {startEnemyEmitter} from "../Emitters/startEnemyEmitter.js";
+import {enemyEmitter} from "../Emitters/enemyEmitter.js";
 
 export let ui_active = false;
 
@@ -21,7 +21,7 @@ export function buildUX() {
 	start_wave.innerHTML = "Start Wave";
 	document.body.appendChild(start_wave);
 	start_wave.addEventListener("click", function () {
-		startEnemyEmitter()
+		enemyEmitter()
 	})
 	ui_active = true;
 }

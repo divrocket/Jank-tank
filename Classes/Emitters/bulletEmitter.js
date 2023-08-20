@@ -1,12 +1,15 @@
-import {tank} from "../../Config/tank.js";
-import {ammo} from "../../Config/ammo.js";
-import {tank_cannon} from "../../Config/tank_cannon.js";
-import {bullets} from "../../CollectionManagement/bullets.js";
-import {reloadAmmo} from "./reloadAmmo.js";
-import {arrowLength} from "../../Config/arrowLength.js";
+import {tank} from "../Config/tank.js";
+import {ammo} from "../Config/ammo.js";
+import {tank_cannon} from "../Config/tank_cannon.js";
+import {bullets} from "../CollectionManagement/bullets.js";
+import {reloadAmmo} from "../Player/Actions/reloadAmmo.js";
+import {arrowLength} from "../Config/arrowLength.js";
+import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
 
-// Ammo Management
-export function fireBullet() {
+export function bulletEmitter() {
+	while (bullets.length > 8) {
+		bullets.shift(); // Remove the oldest position
+	}
 	const currentAmmo = ammo[ammo.currentType];
 	
 	// Don't fire if already reloading
