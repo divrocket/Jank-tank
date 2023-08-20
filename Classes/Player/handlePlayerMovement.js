@@ -6,6 +6,9 @@ import {reloadAmmo} from "./Actions/reloadAmmo.js";
 import {switchAmmoType} from "./Actions/switchAmmoType.js";
 import {pickUpAmmo} from "./Actions/pickUpAmmo.js";
 import {rockCollision} from "../Collision/rockCollision.js";
+import {drawTankTreadTrail} from "../Drawing/drawTankTreadTrail.js";
+import {drawTankTrails} from "../Drawing/drawTankTrails.js";
+import {tankTrail} from "../CollectionManagement/tankTrail.js";
 
 const MAX_CANNON_ANGLE = Math.PI / 2.5; // 45 degrees in radians
 const MIN_CANNON_ANGLE = -Math.PI / 2.5; // -45 degrees in radians

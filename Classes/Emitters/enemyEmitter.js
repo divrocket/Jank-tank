@@ -6,7 +6,7 @@ let lastSpawnTimestamp = 0;
 const spawnInterval = 10; // 0.3 seconds in milliseconds
 
 export function spawnEnemy(timestamp) {
-	if (enemies.length > 100) return;
+	if (enemies.length > 50) return;
 	
 	if (timestamp - lastSpawnTimestamp >= spawnInterval) {
 		let x, y;

@@ -7,11 +7,10 @@ export function drawTankTreadTrail() {
 	const shadowColor = selectedAmmo.color1;
 	const color2 = selectedAmmo.color2;
 	const trailLength = tankTrail.length;
-	const trailWidth = 50; // Adjust this value for the desired width
 	
 	function hexToRgbA(hex, alpha = 1) {
 		let c;
-		if (/^#([A-Fa-f0-9]{3,6})$/.test(hex)) {
+		if (/^#([A-Fa-f0-9]{3,6})$/.test(hex)) { // Merged the two regex patterns
 			if (hex.length === 4) {
 				c = [hex[1], hex[1], hex[2], hex[2], hex[3], hex[3]].join('');
 			} else {
@@ -25,16 +24,19 @@ export function drawTankTreadTrail() {
 	
 	ctx.save();
 	ctx.shadowColor = shadowColor;
-	ctx.shadowBlur = 20;
+	ctx.shadowBlur = 6;
 	
 	for (let i = 0; i < trailLength; i++) {
 		const alpha = (i + 1) / trailLength;
-		const tread = tankTrail[i];
+		const treads = tankTrail[i];
 		
 		ctx.fillStyle = hexToRgbA(color2, alpha); // Set fill color with decreasing opacity
 		
-		// Drawing middle tread centered and wider
-		ctx.fillRect(tread.x - (trailWidth / 2), tread.y - 5, trailWidth, 10);
+		// Drawing left tread
+		ctx.fillRect(treads.left.x - 5, treads.left.y - 5, 10, 10);
+		
+		// Drawing right tread
+		ctx.fillRect(treads.right.x - 5, treads.right.y - 5, 10, 10);
 	}
 	
 	ctx.restore();

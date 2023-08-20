@@ -8,41 +8,25 @@ import {rockEmitter} from "./Classes/Emitters/rockEmitter.js";
 import {drawRocks} from "./Classes/Drawing/drawRocks.js";
 import {enemyEmitter} from "./Classes/Emitters/enemyEmitter.js";
 import {enemyCollision} from "./Classes/Collision/enemyCollision.js";
-import {pickUpAmmo} from "./Classes/Player/Actions/pickUpAmmo.js";
 import {displayScore} from "./Classes/Interfaces/displayScore.js";
 import {drawMuzzleFlash} from "./Classes/Drawing/drawMuzzleFlash.js";
 import {drawTankBody} from "./Classes/Drawing/drawTankBody.js";
-import {drawReloadingSpinner} from "./Classes/Drawing/drawReloadingSpinner.js";
 import {drawTankCannon} from "./Classes/Drawing/drawTankCannon.js";
 import {drawTankTreadTrail} from "./Classes/Drawing/drawTankTreadTrail.js";
 import {drawDroppedAmmo} from "./Classes/Drawing/drawDroppedAmmo.js";
 import {drawHealthBar} from "./Classes/Drawing/drawHealthBar.js";
 import {drawTankTrails} from "./Classes/Drawing/drawTankTrails.js";
-import {rockCollision} from "./Classes/Collision/rockCollision.js";
 import {handlePlayerMovement} from "./Classes/Player/handlePlayerMovement.js";
 import {buildUX} from "./Classes/Interfaces/buildUX.js";
 import {drawStatsToPage} from "./Classes/Drawing/drawProfiler.js";
-import {keys} from "./Classes/CollectionManagement/keys.js";
-import {tankTrail} from "./Classes/CollectionManagement/tankTrail.js";
 import {drawMuzzleParticles} from "./Classes/Drawing/drawMuzzleParticles.js";
 
 // import {dustEmitter} from "./Classes/Emitters/dustEmitter.js";
 // import {snowEmitter} from "./Classes/Emitters/snowEmitter.js";
 
-
 // Game Loop
-let lastTimestamp = 0;
-
-function updateGameArea(timestamp = 0) {
-	const deltaTime = timestamp - lastTimestamp;
-	lastTimestamp = timestamp;
-	
+function updateGameArea() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
-	// Input
-	
-	handlePlayerMovement();
-	preventDuplicateKeyActions();
 	
 	// Drawing
 	drawBackgroundImage();
@@ -53,14 +37,10 @@ function updateGameArea(timestamp = 0) {
 	drawRocks();
 	animateParticles();
 	drawMuzzleParticles();
+	drawTankTreadTrail();
+	drawTankTrails();
 	
-	// Logic
-	if (keys['s'] || keys['w'] || keys['a'] || keys['d']) {
-		drawTankTreadTrail();
-		drawTankTrails();
-	} else {
-		tankTrail.length = 0;
-	}
+	handlePlayerMovement();
 	
 	// Collision
 	enemyCollision();
@@ -74,9 +54,9 @@ function updateGameArea(timestamp = 0) {
 	displayScore();
 	displayAmmoUI();
 	
-	
 	// Update stats and request the next frame
 	drawStatsToPage();
+	preventDuplicateKeyActions();
 	requestAnimationFrame(updateGameArea);
 }
 

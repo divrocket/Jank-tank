@@ -13,6 +13,8 @@ export function drawBullets() {
 	for (let i = bullets.length - 1; i >= 0; i--) {
 		bullet = bullets[i];
 		
+		bullet.dy += 0.08;
+		
 		potentialNewX = bullet.x + bullet.dx;
 		potentialNewY = bullet.y + bullet.dy;
 		
@@ -32,17 +34,20 @@ export function drawBullets() {
 		
 		ctx.save();
 		ctx.shadowColor = bulletProperties.color1;
-		ctx.shadowBlur = 10;
+		ctx.shadowBlur = 500;
 		
 		gradient = ctx.createRadialGradient(bullet.x, bullet.y, 1, bullet.x, bullet.y, bulletProperties.size);
 		gradient.addColorStop(0, bulletProperties.color1);
 		
+		// Add random blobbiness to the bullet's appearance
+		let randomSizeOffset = (Math.random() - 0.5) * 10; // Vary by 10 units for example
+		let randomXOffset = (Math.random() - 0.5) * 5;     // Shift by 5 units
+		let randomYOffset = (Math.random() - 0.5) * 5;     // Shift by 5 units
+		
 		ctx.beginPath();
-		ctx.moveTo(bullet.x, bullet.y);
-		ctx.lineTo(bullet.x + bulletProperties.size * bullet.dx, bullet.y + bulletProperties.size * bullet.dy);
-		ctx.strokeStyle = gradient;
-		ctx.lineWidth = bulletProperties.size;
-		ctx.stroke();
+		ctx.arc(bullet.x + randomXOffset, bullet.y + randomYOffset, bulletProperties.size + 5 + randomSizeOffset, 0, Math.PI * 2, false);
+		ctx.fillStyle = gradient;
+		ctx.fill();
 		
 		ctx.restore();
 		
@@ -59,3 +64,4 @@ export function drawBullets() {
 		}
 	}
 }
+

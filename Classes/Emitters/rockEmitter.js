@@ -1,16 +1,31 @@
 import {canvas} from "../Canvas/ctx.js";
 import {rocks} from "../CollectionManagement/rocks.js";
+import {rockImage} from "../Drawing/drawRocks.js";
 
-let rockImage = new Image();
-rockImage.src = 'assets/tree_assets/Trees_texture_shadow_dark/Snow_christmass_tree1.png';
+const MIN_DISTANCE_BETWEEN_ROCKS = rockImage.width + 20; // adjust based on your needs
+
+function isTooCloseToExistingRock(x, y) {
+	return rocks.some(rock => {
+		const distance = Math.sqrt((rock.x - x) ** 2 + (rock.y - y) ** 2);
+		return distance < MIN_DISTANCE_BETWEEN_ROCKS;
+	});
+}
 
 export function rockEmitter(number) {
 	for (let i = 0; i < number; i++) {
-		const x = Math.random() * (canvas.width - rockImage.width); // Subtract image width to ensure the rock is fully visible
-		const y = Math.random() * (canvas.height - rockImage.height); // Subtract image height for the same reason
-		// You can keep the radius if you still need it for collision detection or other purposes
-		const radius = (Math.random() * 5) + 50; // gives random radius between 10 and 30
+		let x = Math.random() * (canvas.width - rockImage.width);
+		let y = Math.random() * (canvas.height - rockImage.height);
 		
-		rocks.push({x, y, radius});
+		// Adjust position if the new rock is too close to existing rocks
+		while (isTooCloseToExistingRock(x, y)) {
+			x = Math.random() * (canvas.width - rockImage.width);
+			y = Math.random() * (canvas.height - rockImage.height);
+		}
+		
+		const radius = (Math.random() * 5) + 50;
+		const dx = (Math.random() - 0.5) * 0.5; // subtle floating motion in x direction
+		const dy = (Math.random() - 0.5) * 0.5; // subtle floating motion in y direction
+		
+		rocks.push({x, y, radius, dx, dy});
 	}
 }
