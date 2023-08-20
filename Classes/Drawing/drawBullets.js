@@ -6,6 +6,18 @@ import {ammo} from "../Config/ammo.js";
 import {checkBulletEnemyCollision} from "../Collision/checkBulletEnemyCollision.js";
 import {dropAmmo} from "../Events/dropAmmo.js";
 import {addScore} from "../Player/Actions/addScore.js";
+import {rocks} from "../CollectionManagement/rocks.js";
+import {tank_cannon as bulletProperties} from "../Config/tank_cannon.js";
+import {rockImage} from "./drawRocks.js";
+
+
+function checkBulletRockCollision(bullet, rock) {
+	const distanceX = bullet.x - rock.x - rockImage.width / 2; // Accounting for the center of the rock
+	const distanceY = bullet.y - rock.y - rockImage.height / 2; // Accounting for the center of the rock
+	const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+	return distance < (bulletProperties.size + rockImage.width / 2); // Assuming the rock and bullet are circular
+}
+
 
 export function drawBullets() {
 	let bullet, potentialNewX, potentialNewY, bulletProperties, gradient;
@@ -50,6 +62,21 @@ export function drawBullets() {
 		ctx.fill();
 		
 		ctx.restore();
+		
+		
+		for (let rock of rocks) {
+			if (checkBulletRockCollision(bullet, rock)) {
+				// Reverse bullet's direction
+				const angle = Math.atan2(bullet.dy, bullet.dx) + Math.PI; // Reflect the angle
+				bullet.dx = Math.cos(angle) * Math.sqrt(bullet.dx * bullet.dx + bullet.dy * bullet.dy);
+				bullet.dy = Math.sin(angle) * Math.sqrt(bullet.dx * bullet.dx + bullet.dy * bullet.dy);
+				
+				// Move bullet out of collision (prevent sticking)
+				bullet.x += bullet.dx;
+				bullet.y += bullet.dy;
+				break; // Once a collision is found with one rock, skip other rocks for this bullet
+			}
+		}
 		
 		for (let j = enemies.length - 1; j >= 0; j--) {
 			if (checkBulletEnemyCollision(bullet, enemies[j])) {

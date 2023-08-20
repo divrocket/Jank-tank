@@ -84,8 +84,6 @@ export function drawTankCannon() {
 		ctx.fill();
 		ctx.stroke();
 	}
-
-	
 	
 	// // Drawing the cannon muzzle
 	// ctx.lineWidth = 1; // Line width for the stroke

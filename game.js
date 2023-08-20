@@ -67,7 +67,7 @@ const init = async () => {
 	requestAnimationFrame(updateGameArea);
 	
 	enemyEmitter();
-	rockEmitter(4);
+	rockEmitter(6);
 	buildUX();
 };
 
