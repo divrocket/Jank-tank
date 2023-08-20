@@ -12,7 +12,8 @@ export let ammo = {
 		fireRate: 500,
 		lastFired: 0,
 		reloadSpeed: 2000,
-		reloading: false
+		reloading: false,
+		reloadPercent: 0
 	},
 	explosive: {
 		count: 5,
@@ -26,7 +27,8 @@ export let ammo = {
 		fireRate: 1000,
 		lastFired: 0,
 		reloadSpeed: 3000,
-		reloading: false
+		reloading: false,
+		reloadPercent: 0
 	},
 	armorPiercing: {
 		count: 1000,
@@ -40,7 +42,8 @@ export let ammo = {
 		fireRate: 300,
 		lastFired: 0,
 		reloadSpeed: 1500,
-		reloading: false
+		reloading: false,
+		reloadPercent: 0
 	},
 	incendiary: {
 		count: 10,
@@ -54,7 +57,8 @@ export let ammo = {
 		fireRate: 1000,
 		lastFired: 0,
 		reloadSpeed: 2000,
-		reloading: false
+		reloading: false,
+		reloadPercent: 0
 	},
 	emp: {
 		count: 5,
@@ -68,7 +72,8 @@ export let ammo = {
 		fireRate: 1000,
 		lastFired: 0,
 		reloadSpeed: 3000,
-		reloading: false
+		reloading: false,
+		reloadPercent: 0
 	}
 };
 export function addAmmo(type, count) {

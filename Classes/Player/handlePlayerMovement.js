@@ -9,6 +9,7 @@ import {rockCollision} from "../Collision/rockCollision.js";
 import {drawTankTreadTrail} from "../Drawing/drawTankTreadTrail.js";
 import {drawTankTrails} from "../Drawing/drawTankTrails.js";
 import {tankTrail} from "../CollectionManagement/tankTrail.js";
+import {drawReloadingSpinner} from "../Drawing/drawReloadingSpinner.js";
 
 const MAX_CANNON_ANGLE = Math.PI / 2.5; // 45 degrees in radians
 const MIN_CANNON_ANGLE = -Math.PI / 2.5; // -45 degrees in radians
@@ -77,6 +78,7 @@ export function handlePlayerMovement() {
 	
 	if (keys["r"]) {
 		reloadAmmo();
+		
 	}
 	
 	if (keys["z"] && !tabPressed) {

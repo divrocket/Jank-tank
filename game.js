@@ -20,6 +20,7 @@ import {handlePlayerMovement} from "./Classes/Player/handlePlayerMovement.js";
 import {buildUX} from "./Classes/Interfaces/buildUX.js";
 import {drawStatsToPage} from "./Classes/Drawing/drawProfiler.js";
 import {drawMuzzleParticles} from "./Classes/Drawing/drawMuzzleParticles.js";
+import {drawReloadingSpinner} from "./Classes/Drawing/drawReloadingSpinner.js";
 
 // import {dustEmitter} from "./Classes/Emitters/dustEmitter.js";
 // import {snowEmitter} from "./Classes/Emitters/snowEmitter.js";
@@ -33,6 +34,7 @@ function updateGameArea() {
 	drawDroppedAmmo();
 	drawHealthBar();
 	drawMuzzleFlash();
+	drawReloadingSpinner();
 	
 	drawRocks();
 	animateParticles();

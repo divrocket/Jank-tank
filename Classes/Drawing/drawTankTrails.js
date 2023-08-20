@@ -13,7 +13,7 @@ export function drawTankTrails() {
 	};
 	tankTrail.push({left: leftTread, right: rightTread});
 	
-	while (tankTrail.length > 100) {
+	while (tankTrail.length > 40) {
 		tankTrail.shift(); // Remove the oldest position
 	}
 }

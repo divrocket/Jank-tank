@@ -32,12 +32,12 @@ export function drawTankBody() {
 	// ctx.fillStyle = "#00ffff"
 	// drawRoundedRect(ctx, right.x - 95, right.y - 35, 40, 70, 4);
 
-	// Left Armor
-	// ctx.fillStyle = "#5590ab"
+	// // Left Armor
+	// ctx.fillStyle = selectedAmmo.color1
 	// drawRoundedRect(ctx, front.x - tank.width / 2 - 8, front.y - 7, 45, 15, 7);
-
-	// Right Armor
-	// ctx.fillStyle = "#5590ab"
+	//
+	// // Right Armor
+	// ctx.fillStyle = selectedAmmo.color1
 	// drawRoundedRect(ctx, back.x - tank.width / 2 - 8, back.y - 8, 45, 15, 7);
 
 	// Main Body of the tank
