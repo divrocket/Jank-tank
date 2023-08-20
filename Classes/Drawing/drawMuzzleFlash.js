@@ -13,8 +13,8 @@ export function drawMuzzleFlash() {
 	
 	if (tank_cannon.muzzleFlash) {
 		const combinedAngle = tank.angle + tank_cannon.angle;
-		const flashX = tank_cannon.x + (tank_cannon.size / 1.8 + arrowLength) * Math.cos(combinedAngle);
-		const flashY = tank_cannon.y + (tank_cannon.size / 1.8 + arrowLength) * Math.sin(combinedAngle);
+		const flashX = tank_cannon.x + (tank_cannon.size / 1.8 + arrowLength + 50) * Math.cos(combinedAngle);
+		const flashY = tank_cannon.y + (tank_cannon.size / 1.8 + arrowLength + 50) * Math.sin(combinedAngle);
 		
 		weaponFireEmitter(flashX, flashY, combinedAngle);  // Emit particles when there's a muzzle flash
 		

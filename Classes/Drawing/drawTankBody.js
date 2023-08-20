@@ -47,6 +47,8 @@ export function drawTankBody() {
 	ctx.shadowColor = selectedAmmo.color1
 	ctx.shadowBlur = 10;
 	
+	
+	
 	// // Upper Deck
 	// ctx.fillStyle = selectedAmmo.color1
 	// drawRoundedRect(ctx, -tank.width / 3.4, (-tank.height / 4) - 5, (tank.width / 2) + 10, (tank.height / 2) + 10, 20);

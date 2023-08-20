@@ -26,8 +26,8 @@ export function bulletEmitter() {
 	const bulletSpeed = bulletProperties.speed;
 	const combinedAngle = tank.angle + tank_cannon.angle;
 	
-	const startX = tank_cannon.x + (tank_cannon.size / 2 + arrowLength) * Math.cos(combinedAngle);
-	const startY = tank_cannon.y + (tank_cannon.size / 2 + arrowLength) * Math.sin(combinedAngle);
+	const startX = tank_cannon.x + (tank_cannon.size / 2 + arrowLength + 50) * Math.cos(combinedAngle);
+	const startY = tank_cannon.y + (tank_cannon.size / 2 + arrowLength + 50) * Math.sin(combinedAngle);
 	
 	bullets.push({
 		x: startX,

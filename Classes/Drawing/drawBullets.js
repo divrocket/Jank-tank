@@ -34,7 +34,7 @@ export function drawBullets() {
 		
 		ctx.save();
 		ctx.shadowColor = bulletProperties.color1;
-		ctx.shadowBlur = 500;
+		ctx.shadowBlur = 10;
 		
 		gradient = ctx.createRadialGradient(bullet.x, bullet.y, 1, bullet.x, bullet.y, bulletProperties.size);
 		gradient.addColorStop(0, bulletProperties.color1);
