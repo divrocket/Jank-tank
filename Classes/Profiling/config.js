@@ -4,12 +4,12 @@ export const statsConfig = {
 	},
 	"profilerInstance": "systemProfiler",
 	"stats": [
-		{
-			"elementId": "numberOfObjects",
-			"description": "Number of Objects:",
-			"type": "scalar",
-			"property": "profilerSize"
-		},
+		// {
+		// 	"elementId": "numberOfObjects",
+		// 	"description": "Number of Objects:",
+		// 	"type": "scalar",
+		// 	"property": "profilerSize"
+		// },
 		{
 			"elementId": "bulletsLength",
 			"description": "Bullets Array Length:",
@@ -22,18 +22,18 @@ export const statsConfig = {
 			"type": "arrayLength",
 			"arrayName": "tankTrail"
 		},
-		{
-			"elementId": "dustParticlesLength",
-			"description": "Dust Particles Length:",
-			"type": "arrayLength",
-			"arrayName": "dustParticles"
-		},
-		{
-			"elementId": "snowflakesLength",
-			"description": "Snowflakes Length:",
-			"type": "arrayLength",
-			"arrayName": "snowflakes"
-		},
+		// {
+		// 	"elementId": "dustParticlesLength",
+		// 	"description": "Dust Particles Length:",
+		// 	"type": "arrayLength",
+		// 	"arrayName": "dustParticles"
+		// },
+		// {
+		// 	"elementId": "snowflakesLength",
+		// 	"description": "Snowflakes Length:",
+		// 	"type": "arrayLength",
+		// 	"arrayName": "snowflakes"
+		// },
 		{
 			"elementId": "rocksLength",
 			"description": "Rocks Length:",
@@ -53,22 +53,10 @@ export const statsConfig = {
 			"arrayName": "droppedAmmo"
 		},
 		{
-			"elementId": "keysLength",
-			"description": "Keys Length:",
-			"type": "arrayLength",
-			"arrayName": "keys"
-		},
-		{
 			"elementId": "particlesLength",
 			"description": "Particles Length:",
 			"type": "arrayLength",
 			"arrayName": "particles"
-		},
-		{
-			"elementId": "scoreValue",
-			"description": "Score:",
-			"type": "scalar",
-			"property": "score"
 		}
 	]
 }
