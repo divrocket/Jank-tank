@@ -6,9 +6,10 @@ let lastSpawnTimestamp = 0;
 const spawnInterval = 10; // 0.3 seconds in milliseconds
 
 export function spawnEnemy(timestamp) {
-	if (enemies.length > 50) return;
+	
 	
 	if (timestamp - lastSpawnTimestamp >= spawnInterval) {
+		if (enemies.length > 35) return;
 		let x, y;
 		const size = Math.random() * 20 + 40; // Random size between 10 and 50
 		const speed = Math.random() * 2 + 1; // Random speed between 1 and 3
@@ -42,5 +43,6 @@ export function spawnEnemy(timestamp) {
 }
 
 export function enemyEmitter() {
+	
 	requestAnimationFrame(spawnEnemy);
 }

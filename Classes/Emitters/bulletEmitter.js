@@ -28,6 +28,7 @@ export function bulletEmitter() {
 	
 	const startX = tank_cannon.x + (tank_cannon.size / 2 + arrowLength + 50) * Math.cos(combinedAngle);
 	const startY = tank_cannon.y + (tank_cannon.size / 2 + arrowLength + 50) * Math.sin(combinedAngle);
+	const bulletLifespan = bulletProperties.lifespan || 1000;  // Example: bullets live for 1000 units of distance.
 	
 	bullets.push({
 		x: startX,
@@ -35,7 +36,9 @@ export function bulletEmitter() {
 		dx: bulletSpeed * Math.cos(combinedAngle),
 		dy: bulletSpeed * Math.sin(combinedAngle),
 		type: ammo.currentType,
-		size: bulletProperties.size
+		size: bulletProperties.size,
+		traveled: 0,  // to track how far the bullet has traveled
+		lifespan: bulletLifespan  // assigning the lifespan from bullet properties
 	});
 	
 	currentAmmo.currentMagazine--; // Decrement ammo in magazine a w

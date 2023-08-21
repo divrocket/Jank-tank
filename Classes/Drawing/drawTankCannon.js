@@ -24,8 +24,8 @@ export function drawTankCannon() {
 		const endAngle = (currentAmmo.reloadProgress / 100) * 2 * Math.PI;  // End angle based on the total progress made
 		
 		ctx.beginPath();
-		ctx.arc(0, 0, 55, startAngle, endAngle, false);
-		ctx.lineWidth = 5;
+		ctx.arc(71, 0, 23, startAngle, endAngle, false);
+		ctx.lineWidth = 6;
 		ctx.strokeStyle = currentAmmo.color1;
 		ctx.stroke();
 	}
@@ -41,13 +41,13 @@ export function drawTankCannon() {
 	// ctx.strokeStyle = selectedAmmo.color1;
 	// drawRoundedRect(ctx, tank_cannon.size / 2 + 30, -arrowHeight / 2, arrowLength, arrowHeight, 10);
 
-	const distance= 60; // Distance from center to each rectangle (adjust as needed)
+	const distance= 50; // Distance from center to each rectangle (adjust as needed)
 	
 	let positions = [
-		{ x: -distance, y: -distance, type: 'rect' }, // Top-Left (Arrow)
+		// { x: -distance, y: -distance, type: 'rect' }, // Top-Left (Arrow)
 		{ x: distance, y: -distance, type: 'arrow' },  // Top-Right
-		{ x: -distance, y: distance, type: 'rect' },  // Bottom-Left
-		{ x: distance, y: distance, type: 'rect' }    // Bottom-Right
+		// { x: -distance, y: distance, type: 'rect' },  // Bottom-Left
+		// { x: distance, y: distance, type: 'rect' }    // Bottom-Right
 	];
 	
 	const theta = Math.PI / 4; // 45 degrees in radians
@@ -61,30 +61,21 @@ export function drawTankCannon() {
 	});
 	
 	positions.forEach(pos => {
-		ctx.fillStyle = selectedAmmo.color2;
+		ctx.fillStyle = selectedAmmo.color1;
 		ctx.strokeStyle = selectedAmmo.color1;
+		ctx.shadowColor = selectedAmmo.color1;
+		ctx.shadowBlur = 100;
 		
+		// if (pos.type !== 'arrow') return;
 		if (pos.type === 'arrow') {
-			// drawArrow(ctx, pos.x, pos.y, arrowLength, arrowHeight);
-			
-			ctx.fillStyle = selectedAmmo.color1;
+			ctx.fillStyle = selectedAmmo.color2
 			ctx.strokeStyle = selectedAmmo.color1;
-			drawRoundedRect(ctx, pos.x - (arrowLength / 2), pos.y - (arrowHeight / 2), arrowLength, arrowHeight, 10);
-		} else {
-			drawRoundedRect(ctx, pos.x - (arrowLength / 2), pos.y - (arrowHeight / 2), arrowLength, arrowHeight, 10);
 		}
+		
+		drawRoundedRect(ctx, pos.x - (arrowLength / 2), pos.y - (arrowHeight / 2), arrowLength, arrowHeight, 12);
+		
 	});
-	
-	function drawArrow(ctx, x, y, width, height) {
-		ctx.beginPath();
-		ctx.moveTo(x, y - (height / 2));
-		ctx.lineTo(x + width, y);
-		ctx.lineTo(x, y + (height / 2));
-		ctx.closePath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	
+
 	// // Drawing the cannon muzzle
 	// ctx.lineWidth = 1; // Line width for the stroke
 	// ctx.fillStyle = selectedAmmo.color1;
@@ -95,8 +86,12 @@ export function drawTankCannon() {
 	// }
 	//
 	// Drawing the cannon base
-	ctx.fillStyle = selectedAmmo.color1
+	// ctx.fillStyle = selectedAmmo.color1
+	// ctx.strokeStyle = selectedAmmo.color1;
+
+	
 	ctx.strokeStyle = selectedAmmo.color1;
+	ctx.fillStyle = selectedAmmo.color2;
 	ctx.lineWidth = 3;
 	drawRoundedRect(ctx, -10, -10, 20, 20, 10);
 	

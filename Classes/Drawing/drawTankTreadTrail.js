@@ -25,7 +25,7 @@ export function drawTankTreadTrail() {
 	
 	ctx.save();
 	ctx.shadowColor = shadowColor;
-	ctx.shadowBlur = 6;
+	ctx.shadowBlur = 1;
 	
 	for (let i = 0; i < trailLength; i++) {
 		const alpha = (i + 1) / trailLength;
@@ -33,9 +33,14 @@ export function drawTankTreadTrail() {
 		
 		ctx.fillStyle = hexToRgbA(color2, alpha); // Set fill color with decreasing opacity
 		
-		// Drawing middle tread
+		// Drawing middle tread as a circle
 		const middleTread = treads.middle;
-		ctx.fillRect(middleTread.x - 25, middleTread.y - 25, 50, 50);
+		
+		// Parameters: x, y, radius, startAngle, endAngle, [anticlockwise]
+		ctx.beginPath();
+		ctx.arc(middleTread.x, middleTread.y, 35, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
 	}
 	
 	ctx.restore();

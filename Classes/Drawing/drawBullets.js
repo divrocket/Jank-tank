@@ -5,7 +5,7 @@ import {particleEmitter} from "../Emitters/particleEmitter.js";
 import {ammo} from "../Config/ammo.js";
 import {checkBulletEnemyCollision} from "../Collision/checkBulletEnemyCollision.js";
 import {dropAmmo} from "../Events/dropAmmo.js";
-import {addScore} from "../Player/Actions/addScore.js";
+import {addScore, createScorePopup} from "../Player/Actions/addScore.js";
 import {rocks} from "../CollectionManagement/rocks.js";
 import {tank_cannon as bulletProperties} from "../Config/tank_cannon.js";
 import {rockImage} from "./drawRocks.js";
@@ -63,6 +63,11 @@ export function drawBullets() {
 		
 		ctx.restore();
 		
+		bullet.traveled += Math.sqrt(bullet.dx**2 + bullet.dy**2);  // Increment traveled distance
+		
+		if (bullet.traveled >= bullet.lifespan) {
+			bullets.splice(i, 1);  // Remove the bullet when it has traveled its full lifespan
+		}
 		
 		for (let rock of rocks) {
 			if (checkBulletRockCollision(bullet, rock)) {
@@ -82,15 +87,15 @@ export function drawBullets() {
 				
 				if (rock.glowIntensity <= 10) {
 					rocks.splice(rocks.indexOf(rock), 1);
-					for (let j = 0; j < 5; j++) {
+					for (let j = 0; j < 2; j++) {
 						//Slightly offset the particle's position to avoid clipping through the rock
-						let x = rock.x + Math.random() * 10 - 5;
-						let y = rock.y + Math.random() * 10 - 5;
+						let x = rock.x + Math.random() * j - 5;
+						let y = rock.y + Math.random() * j - 5;
 						particleEmitter(x, y);
-						
+						addScore(100);
+						createScorePopup(x, y, 150);
 					}
 				}
-				
 				break; // Once a collision is found with one rock, skip other rocks for this bullet
 			}
 		}
@@ -99,10 +104,13 @@ export function drawBullets() {
 			if (checkBulletEnemyCollision(bullet, enemies[j])) {
 				dropAmmo(enemies[j]);
 				particleEmitter(enemies[j].x, enemies[j].y);
+				
+				addScore(150);
+				createScorePopup(enemies[j].x,enemies[j].y, 150);
+				
 				enemies.splice(j, 1);
 				bullets.splice(i, 1);
 				
-				addScore(150);
 				break;
 			}
 		}

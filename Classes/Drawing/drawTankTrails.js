@@ -10,7 +10,7 @@ export function drawTankTrails() {
 	
 	tankTrail.push({ middle: middleTread });
 	
-	while (tankTrail.length > 50) {
+	while (tankTrail.length > 20) {
 		tankTrail.shift(); // Remove the oldest position
 	}
 }

@@ -21,6 +21,7 @@ import {buildUX} from "./Classes/Interfaces/buildUX.js";
 import {drawStatsToPage} from "./Classes/Drawing/drawProfiler.js";
 import {drawMuzzleParticles} from "./Classes/Drawing/drawMuzzleParticles.js";
 import {drawReloadingSpinner} from "./Classes/Drawing/drawReloadingSpinner.js";
+import {handleScorePopups} from "./Classes/Player/Actions/addScore.js";
 
 // import {dustEmitter} from "./Classes/Emitters/dustEmitter.js";
 // import {snowEmitter} from "./Classes/Emitters/snowEmitter.js";
@@ -28,16 +29,16 @@ import {drawReloadingSpinner} from "./Classes/Drawing/drawReloadingSpinner.js";
 // Game Loop
 function updateGameArea() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
+
 	// Drawing
 	drawBackgroundImage();
 	drawDroppedAmmo();
 	drawHealthBar();
 	drawReloadingSpinner();
 	drawRocks();
-	
-	// drawMuzzleFlash();
-	// drawMuzzleParticles();
+	handleScorePopups();
+	drawMuzzleFlash();
+	drawMuzzleParticles();
 	
 	drawTankTreadTrail();
 	drawTankTrails();
@@ -51,7 +52,6 @@ function updateGameArea() {
 	
 	// Update
 	drawBullets();
-	
 	// UI
 	displayScore();
 	displayAmmoUI();
