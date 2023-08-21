@@ -74,6 +74,23 @@ export function drawBullets() {
 				// Move bullet out of collision (prevent sticking)
 				bullet.x += bullet.dx;
 				bullet.y += bullet.dy;
+				
+				// Change the rock's color to match the bullet's
+				rock.glowColor = bulletProperties.color1;
+				
+				rock.glowIntensity = rock.glowIntensity - 10;
+				
+				if (rock.glowIntensity <= 10) {
+					rocks.splice(rocks.indexOf(rock), 1);
+					for (let j = 0; j < 5; j++) {
+						//Slightly offset the particle's position to avoid clipping through the rock
+						let x = rock.x + Math.random() * 10 - 5;
+						let y = rock.y + Math.random() * 10 - 5;
+						particleEmitter(x, y);
+						
+					}
+				}
+				
 				break; // Once a collision is found with one rock, skip other rocks for this bullet
 			}
 		}

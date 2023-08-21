@@ -33,15 +33,15 @@ function updateGameArea() {
 	drawBackgroundImage();
 	drawDroppedAmmo();
 	drawHealthBar();
-	drawMuzzleFlash();
 	drawReloadingSpinner();
-	
 	drawRocks();
-	animateParticles();
-	drawMuzzleParticles();
+	
+	// drawMuzzleFlash();
+	// drawMuzzleParticles();
+	
 	drawTankTreadTrail();
 	drawTankTrails();
-	
+	animateParticles();
 	handlePlayerMovement();
 	
 	// Collision

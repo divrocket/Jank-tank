@@ -21,7 +21,7 @@ export function drawTankBody() {
 	let right = tank.attachmentPoints.right();
 	
 	// Glowing effect
-	ctx.shadowColor = selectedAmmo.color1
+	ctx.shadowColor = selectedAmmo.color2
 	ctx.shadowBlur = 30;
 	
 	// Front Armor
@@ -32,7 +32,7 @@ export function drawTankBody() {
 	// ctx.fillStyle = "#00ffff"
 	// drawRoundedRect(ctx, right.x - 95, right.y - 35, 40, 70, 4);
 
-	// // Left Armor
+	// // Left Armorw
 	// ctx.fillStyle = selectedAmmo.color1
 	// drawRoundedRect(ctx, front.x - tank.width / 2 - 8, front.y - 7, 45, 15, 7);
 	//
@@ -44,7 +44,7 @@ export function drawTankBody() {
 	ctx.fillStyle = selectedAmmo.color2
 	drawRoundedRect(ctx, -tank.width / 2, -tank.height / 2, tank.width, tank.height, 40);
 	
-	ctx.shadowColor = selectedAmmo.color1
+	ctx.shadowColor = selectedAmmo.color2
 	ctx.shadowBlur = 10;
 	
 	

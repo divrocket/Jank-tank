@@ -7,7 +7,7 @@ import {arrowLength} from "../Config/arrowLength.js";
 import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
 
 export function bulletEmitter() {
-	while (bullets.length > 8) {
+	while (bullets.length > 100) {
 		bullets.shift(); // Remove the oldest position
 	}
 	const currentAmmo = ammo[ammo.currentType];

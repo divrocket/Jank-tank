@@ -45,6 +45,17 @@ export function drawRocks() {
 			}
 		}
 		
-		ctx.drawImage(rockImage, rock.x, rock.y, rockImage.width, rockImage.height); // Draws the rock PNG
+		// Apply glow effect if glowColor is set
+		if (rock.glowColor) {
+			ctx.shadowColor = rock.glowColor;
+			ctx.shadowBlur = rock.glowIntensity;
+		} else {
+			ctx.shadowBlur = 0; // No glow if glowColor is not set
+		}
+		
+		ctx.drawImage(rockImage, rock.x, rock.y, rockImage.width, rockImage.height);
+		
+		// Reset shadow properties to avoid affecting other drawn elements
+		ctx.shadowBlur = 0;
 	}
 }

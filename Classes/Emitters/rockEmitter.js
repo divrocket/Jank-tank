@@ -26,6 +26,8 @@ export function rockEmitter(number) {
 		const dx = (Math.random() - 0.5) * 0.5; // subtle floating motion in x direction
 		const dy = (Math.random() - 0.5) * 0.5; // subtle floating motion in y direction
 		
-		rocks.push({x, y, radius, dx, dy});
+		let glowIntensity = 100;
+		
+		rocks.push({x, y, radius, dx, dy, glowColor: null, glowIntensity: glowIntensity});
 	}
 }
