@@ -8,7 +8,7 @@ export class Particle {
 		this.size = Math.random() * 5 + 1;
 		this.speedX = Math.random() * 5 - 2.5;
 		this.speedY = Math.random() * -3 - 1;
-		
+		this.life = Math.random() * 0.3 + 0.2;  // Life between 0.2 and 1 second
 		this.gravity = 0.3;
 		this.bounceFactor = 0.1;
 		this.alpha = 1;
@@ -20,11 +20,10 @@ export class Particle {
 		this.color = this.colors[Math.floor(Math.random() * this.colors.length)]; // Randomly select a color
 		
 		this.hasBounced = false; // flag to check if particle has bounced
-		this.fadeDelay = 200; // time in frames to delay fade after bounce
+		this.fadeDelay = 100; // time in frames to delay fade after bounce
 	}
 	
 	update() {
-		if (this.alpha < 0.02) return;
 		
 		this.speedY += this.gravity;
 		this.y += this.speedY;
@@ -42,14 +41,17 @@ export class Particle {
 		
 		if (this.hasBounced) {
 			if (this.fadeDelay <= 0) {
-				this.alpha -= 0.005;
+				this.alpha -= 0.1;
 			} else {
 				this.fadeDelay--;
 			}
 		}
+		
+		// Decrement life and check if it's exhausted
+		this.life -= 0.005; // Decrement by an arbitrary small amount. Adjust as needed.
 	}
 	
-	draw(ctx) {
+	draw() {
 		ctx.save();
 		// Glowing effect
 		ctx.shadowColor = this.selectedAmmo.color1;

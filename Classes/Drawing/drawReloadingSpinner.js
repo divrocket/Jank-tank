@@ -8,9 +8,10 @@ export function drawReloadingSpinner() {
 	const centerX = canvas.width - 50; // Adjust as needed
 	const centerY = canvas.height - 50; // Adjust as needed
 	const radius = 30; // Adjust as needed
+	const endAngle = (currentAmmo.reloadProgress / 100) * 2 * Math.PI;  // Based on reload progress
 	
 	ctx.beginPath();
-	ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+	ctx.arc(centerX, centerY, radius, 0, endAngle, false);
 	ctx.lineWidth = 5;
 	ctx.strokeStyle = currentAmmo.color1;
 	ctx.stroke();

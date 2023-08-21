@@ -1,12 +1,15 @@
-import {tank} from "../../Config/tank.js";
-import {ammo} from "../../Config/ammo.js";
-import {tank_cannon} from "../../Config/tank_cannon.js";
-import {bullets} from "../../CollectionManagement/bullets.js";
-import {reloadAmmo} from "./reloadAmmo.js";
-import {arrowLength} from "../../Config/arrowLength.js";
+import {tank} from "../Config/tank.js";
+import {ammo} from "../Config/ammo.js";
+import {tank_cannon} from "../Config/tank_cannon.js";
+import {bullets} from "../CollectionManagement/bullets.js";
+import {reloadAmmo} from "../Player/Actions/reloadAmmo.js";
+import {arrowLength} from "../Config/arrowLength.js";
+import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
 
-// Ammo Management
-export function fireBullet() {
+export function bulletEmitter() {
+	while (bullets.length > 100) {
+		bullets.shift(); // Remove the oldest position
+	}
 	const currentAmmo = ammo[ammo.currentType];
 	
 	// Don't fire if already reloading
@@ -23,8 +26,9 @@ export function fireBullet() {
 	const bulletSpeed = bulletProperties.speed;
 	const combinedAngle = tank.angle + tank_cannon.angle;
 	
-	const startX = tank_cannon.x + (tank_cannon.size / 2 + arrowLength) * Math.cos(combinedAngle);
-	const startY = tank_cannon.y + (tank_cannon.size / 2 + arrowLength) * Math.sin(combinedAngle);
+	const startX = tank_cannon.x + (tank_cannon.size / 2 + arrowLength + 50) * Math.cos(combinedAngle);
+	const startY = tank_cannon.y + (tank_cannon.size / 2 + arrowLength + 50) * Math.sin(combinedAngle);
+	const bulletLifespan = bulletProperties.lifespan || 1000;  // Example: bullets live for 1000 units of distance.
 	
 	bullets.push({
 		x: startX,
@@ -32,7 +36,9 @@ export function fireBullet() {
 		dx: bulletSpeed * Math.cos(combinedAngle),
 		dy: bulletSpeed * Math.sin(combinedAngle),
 		type: ammo.currentType,
-		size: bulletProperties.size
+		size: bulletProperties.size,
+		traveled: 0,  // to track how far the bullet has traveled
+		lifespan: bulletLifespan  // assigning the lifespan from bullet properties
 	});
 	
 	currentAmmo.currentMagazine--; // Decrement ammo in magazine a w

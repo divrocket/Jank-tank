@@ -1,5 +1,8 @@
 import {canvas, ctx} from "../Canvas/ctx.js";
-import {score} from "../CollectionManagement/score.js";
+import {score} from "../Player/Actions/addScore.js";
+
+
+
 export function displayScore() {
 	ctx.font = "24px Arial"; // Set the font size and style
 	ctx.fillStyle = "white"; // Choose a color that contrasts with your background

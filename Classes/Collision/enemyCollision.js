@@ -1,9 +1,10 @@
 import {checkTankEnemyCollision} from "./checkTankEnemyCollision.js";
-import {spawnParticles} from "../Emitters/spawnParticles.js";
+import {particleEmitter} from "../Emitters/particleEmitter.js";
 import {enemies} from "../CollectionManagement/enemies.js";
 import {tank} from "../Config/tank.js";
 import {dropAmmo} from "../Events/dropAmmo.js";
-import {addScore} from "../Player/Actions/addScore.js";
+import {addScore, createScorePopup} from "../Player/Actions/addScore.js";
+import {tankTrail} from "../CollectionManagement/tankTrail.js";
 
 export function enemyCollision() {
 	for (let enemy of enemies) {
@@ -12,15 +13,18 @@ export function enemyCollision() {
 		
 		if (checkTankEnemyCollision(tank, enemy)) {
 			tank.health -= 10;
-			spawnParticles(enemy.x, enemy.y);
+			
+			particleEmitter(enemy.x, enemy.y);
 			dropAmmo(enemy);
-			enemies.splice(enemies.indexOf(enemy), 1);
 			addScore(100);
+			createScorePopup(enemy.x,enemy.y, 100);
+			
+			enemies.splice(enemies.indexOf(enemy), 1);
 		}
 		
 		// for (let point of tankTrail) {
 		// 	if (checkEnemyTrailCollision(enemy, point.left) || checkEnemyTrailCollision(enemy, point.right)) {
-		// 		spawnParticles(enemy.x, enemy.y);
+		// 		particleEmitter(enemy.x, enemy.y);
 		// 		enemies.splice(enemies.indexOf(enemy), 1);
 		// 		addScore(100);
 		// 	}
