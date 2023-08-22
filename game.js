@@ -18,7 +18,7 @@ import {drawHealthBar} from "./Classes/Drawing/drawHealthBar.js";
 import {drawTankTrails} from "./Classes/Drawing/drawTankTrails.js";
 import {handlePlayerMovement} from "./Classes/Player/handlePlayerMovement.js";
 import {buildUX} from "./Classes/Interfaces/buildUX.js";
-import {drawStatsToCanvas} from "./Classes/Drawing/drawProfiler.js";
+import {drawStatsToPage} from "./Classes/Drawing/drawProfiler.js";
 import {drawMuzzleParticles} from "./Classes/Drawing/drawMuzzleParticles.js";
 import {drawReloadingSpinner} from "./Classes/Drawing/drawReloadingSpinner.js";
 import {handleScorePopups} from "./Classes/Player/Actions/addScore.js";
@@ -32,7 +32,6 @@ function updateGameArea() {
 
 	// Drawing
 	drawBackgroundImage();
-
 	drawDroppedAmmo();
 	drawHealthBar();
 	drawReloadingSpinner();
@@ -53,25 +52,15 @@ function updateGameArea() {
 	
 	// Update
 	drawBullets();
-	
 	// UI
 	displayScore();
 	displayAmmoUI();
 	
-	drawStatsToCanvas();
+	// Update stats and request the next frame
+	drawStatsToPage();
 	preventDuplicateKeyActions();
 	requestAnimationFrame(updateGameArea);
 }
-
-//Screen Size change
-window.addEventListener("resize", () => {
-	// Drawing
-	drawBackgroundImage();
-	
-	ctx.canvas.width = window.innerWidth
-	ctx.canvas.height = window.innerHeight
-	
-});
 
 const init = async () => {
 	// Initial call to start the game loop

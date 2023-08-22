@@ -10,14 +10,13 @@ import {drawTankTreadTrail} from "../Drawing/drawTankTreadTrail.js";
 import {drawTankTrails} from "../Drawing/drawTankTrails.js";
 import {tankTrail} from "../CollectionManagement/tankTrail.js";
 import {drawReloadingSpinner} from "../Drawing/drawReloadingSpinner.js";
-import {ctx} from "../Canvas/ctx.js";
 
 const MAX_CANNON_ANGLE = Math.PI / 2.5; // 45 degrees in radians
 const MIN_CANNON_ANGLE = -Math.PI / 2.5; // -45 degrees in radians
 let tabPressed = false;
 
-const SCREEN_WIDTH = ctx.canvas.width; // Replace with the width of your game screen or canvas
-const SCREEN_HEIGHT = ctx.canvas.height; // Replace with the height of your game screen or canvas
+const SCREEN_WIDTH = 1920; // Replace with the width of your game screen or canvas
+const SCREEN_HEIGHT = 1080; // Replace with the height of your game screen or canvas
 
 export function handlePlayerMovement() {
 	

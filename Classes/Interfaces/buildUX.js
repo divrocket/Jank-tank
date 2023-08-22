@@ -6,7 +6,9 @@ export let ui_active = false;
 
 export function buildUX() {
 	if (ui_active) return;
-
+	let hr = document.createElement("hr");
+	document.body.appendChild(hr);
+	
 	let clear_enemies = document.createElement("button");
 	clear_enemies.innerHTML = "Clear enemies";
 	document.body.appendChild(clear_enemies);
