@@ -1,6 +1,6 @@
 import {canvas} from "../Canvas/ctx.js";
 import {Enemy} from "../Objects/enemy.js";
-import {enemies} from "../CollectionManagement/enemies.js";
+import {enemies} from "../CollectionManagement/collector.js";
 
 let lastSpawnTimestamp = 0;
 const spawnInterval = 10; // 0.3 seconds in milliseconds
@@ -9,7 +9,7 @@ export function spawnEnemy(timestamp) {
 	
 	
 	if (timestamp - lastSpawnTimestamp >= spawnInterval) {
-		if (enemies.length > 35) return;
+		if (enemies.length > 50) return;
 		let x, y;
 		const size = Math.random() * 20 + 40; // Random size between 10 and 50
 		const speed = Math.random() * 2 + 1; // Random speed between 1 and 3
