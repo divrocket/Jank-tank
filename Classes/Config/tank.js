@@ -3,8 +3,10 @@ export let tank = {
 	height: 70,
 	angle: 4.7,
 	rotationSpeed: 0.03,
+	flashDuration: 0,
 	health: 100,
 	maxHealth: 100,
+	collided: false,
 	x_body: 0, // Set a proper value, adjust as needed
 	y_body: 0, // Set a proper value, adjust as needed
 	get attachmentPoints() {

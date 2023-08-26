@@ -1,4 +1,4 @@
-import { snowflakes } from '../CollectionManagement/snowflakes.js';
+import { snowflakes } from '../CollectionManagement/collector.js';
 
 export function animateSnow() {
 	

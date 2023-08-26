@@ -1,4 +1,4 @@
-import {keys} from "../CollectionManagement/keys.js";
+import {keys} from "../CollectionManagement/collector.js";
 
 export function preventDuplicateKeyActions() {
 	document.addEventListener('keydown', function (e) {

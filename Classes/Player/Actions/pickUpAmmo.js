@@ -1,7 +1,7 @@
 import {checkTankAmmoCollision} from "../../Collision/checkTankAmmoCollision.js";
 import {addAmmo} from "../../Config/ammo.js";
 import {tank} from "../../Config/tank.js";
-import {droppedAmmo} from "../../CollectionManagement/droppedAmmo.js";
+import {droppedAmmo} from "../../CollectionManagement/collector.js";
 
 export function pickUpAmmo() {
 	for (let i = 0; i < droppedAmmo.length; i++) {

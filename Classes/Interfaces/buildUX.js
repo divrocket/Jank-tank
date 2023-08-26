@@ -1,4 +1,4 @@
-import {enemies} from "../CollectionManagement/enemies.js";
+import {enemies} from "../CollectionManagement/collector.js";
 import {destroyEnemyEmitter} from "./destroyEnemyEmitter.js";
 import {enemyEmitter} from "../Emitters/enemyEmitter.js";
 

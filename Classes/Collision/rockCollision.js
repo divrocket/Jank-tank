@@ -1,5 +1,4 @@
-import {rocks} from "../CollectionManagement/rocks.js";
-import {isRectangleCircleCollision} from "../Conditions/isRectangleCircleCollision.js";
+import {rocks} from "../CollectionManagement/collector.js";
 import {tank} from "../Config/tank.js";
 import {tank_cannon} from "../Config/tank_cannon.js";
 import {rockImage} from "../Drawing/drawRocks.js";

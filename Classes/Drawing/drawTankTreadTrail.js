@@ -1,9 +1,9 @@
 import {ctx} from "../Canvas/ctx.js";
-import {tankTrail} from "../CollectionManagement/tankTrail.js";
+import {tankTrail} from "../CollectionManagement/collector.js";
 import {ammo} from "../Config/ammo.js";
 
 
-function hexToRgbA(hex, alpha = 1) {
+export function hexToRgbA(hex, alpha = 1) {
 	let c;
 	if (/^#([A-Fa-f0-9]{3,6})$/.test(hex)) { // Merged the two regex patterns
 		if (hex.length === 4) {

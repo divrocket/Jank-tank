@@ -1,5 +1,5 @@
 import {canvas} from "../Canvas/ctx.js";
-import {rocks} from "../CollectionManagement/rocks.js";
+import {rocks} from "../CollectionManagement/collector.js";
 import {rockImage} from "../Drawing/drawRocks.js";
 
 const MIN_DISTANCE_BETWEEN_ROCKS = rockImage.width + 20; // adjust based on your needs

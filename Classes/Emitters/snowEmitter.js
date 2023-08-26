@@ -1,6 +1,6 @@
 import {SnowParticle} from "../Objects/snowParticle.js";
 import {numberOfSnowflakes} from "../Config/numberOfSnowflakes.js";
-import {snowflakes} from "../CollectionManagement/snowflakes.js";
+import {snowflakes} from "../CollectionManagement/collector.js";
 import {animateSnow} from "../Animation/animateSnow.js";
 
 export function snowEmitter() {

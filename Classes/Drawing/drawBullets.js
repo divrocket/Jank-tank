@@ -1,12 +1,12 @@
 import {canvas, ctx} from "../Canvas/ctx.js";
-import {bullets} from "../CollectionManagement/bullets.js";
-import {enemies} from "../CollectionManagement/enemies.js";
+import {bullets} from "../CollectionManagement/collector.js";
+import {enemies} from "../CollectionManagement/collector.js";
 import {particleEmitter} from "../Emitters/particleEmitter.js";
 import {ammo} from "../Config/ammo.js";
 import {checkBulletEnemyCollision} from "../Collision/checkBulletEnemyCollision.js";
 import {dropAmmo} from "../Events/dropAmmo.js";
 import {addScore, createScorePopup} from "../Player/Actions/addScore.js";
-import {rocks} from "../CollectionManagement/rocks.js";
+import {rocks} from "../CollectionManagement/collector.js";
 import {tank_cannon as bulletProperties} from "../Config/tank_cannon.js";
 import {rockImage} from "./drawRocks.js";
 
@@ -19,9 +19,9 @@ function checkBulletRockCollision(bullet, rock) {
 }
 
 
-export function drawBullets() {
+export function drawBullets1() {
+	if(bullets.length <= 0) return;
 	let bullet, potentialNewX, potentialNewY, bulletProperties, gradient;
-	
 	for (let i = bullets.length - 1; i >= 0; i--) {
 		bullet = bullets[i];
 		
@@ -116,4 +116,86 @@ export function drawBullets() {
 		}
 	}
 }
+
+//Simplified version of drawBullets() for the tank
+export function drawBullets() {
+	if (bullets.length <= 0) return;
+	
+	for (let i = bullets.length - 1; i >= 0; i--) {
+		let bullet = bullets[i];
+		bullet.dy += 0.08;
+		
+		// Move bullet
+		bullet.x += bullet.dx;
+		bullet.y += bullet.dy;
+		
+		// Bounce bullet on canvas edge
+		if (bullet.x < 0 || bullet.x > canvas.width) {
+			bullet.dx = -bullet.dx;
+		}
+		if (bullet.y < 0 || bullet.y > canvas.height) {
+			bullet.dy = -bullet.dy;
+		}
+		
+		// Draw bullet as a laser (solid color line instead of gradient-filled circle)
+		ctx.strokeStyle = ammo[bullet.type].color1;
+		ctx.lineWidth = 10;  // You can adjust for desired laser thickness
+		ctx.beginPath();
+		ctx.moveTo(bullet.x - bullet.dx, bullet.y - bullet.dy);  // Start position of the laser
+		ctx.lineTo(bullet.x, bullet.y);  // End position of the laser
+		ctx.stroke();
+		
+		bullet.traveled += Math.sqrt(bullet.dx**2 + bullet.dy**2);
+		if (bullet.traveled >= bullet.lifespan) {
+			bullets.splice(i, 1);
+		}
+		
+		for (let rock of rocks) {
+			if (checkBulletRockCollision(bullet, rock)) {
+				// Reverse bullet's direction
+				const angle = Math.atan2(bullet.dy, bullet.dx) + Math.PI; // Reflect the angle
+				bullet.dx = Math.cos(angle) * Math.sqrt(bullet.dx * bullet.dx + bullet.dy * bullet.dy);
+				bullet.dy = Math.sin(angle) * Math.sqrt(bullet.dx * bullet.dx + bullet.dy * bullet.dy);
+				
+				// Move bullet out of collision (prevent sticking)
+				bullet.x += bullet.dx;
+				bullet.y += bullet.dy;
+				
+				// Change the rock's color to match the bullet's
+				rock.glowColor = bulletProperties.color1;
+				
+				rock.glowIntensity = rock.glowIntensity - 10;
+				
+				if (rock.glowIntensity <= 10) {
+					rocks.splice(rocks.indexOf(rock), 1);
+					for (let j = 0; j < 2; j++) {
+						//Slightly offset the particle's position to avoid clipping through the rock
+						let x = rock.x + Math.random() * j - 5;
+						let y = rock.y + Math.random() * j - 5;
+						particleEmitter(x, y);
+						addScore(100);
+						createScorePopup(x, y, 150);
+					}
+				}
+				break; // Once a collision is found with one rock, skip other rocks for this bullet
+			}
+		}
+		
+		for (let j = enemies.length - 1; j >= 0; j--) {
+			if (checkBulletEnemyCollision(bullet, enemies[j])) {
+				dropAmmo(enemies[j]);
+				particleEmitter(enemies[j].x, enemies[j].y);
+				
+				addScore(150);
+				createScorePopup(enemies[j].x,enemies[j].y, 150);
+				
+				enemies.splice(j, 1);
+				bullets.splice(i, 1);
+				
+				break;
+			}
+		}
+	}
+}
+
 

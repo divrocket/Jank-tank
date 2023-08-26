@@ -1,4 +1,4 @@
-import { dustParticles } from "../CollectionManagement/dustParticles.js";
+import { dustParticles } from "../CollectionManagement/collector.js";
 
 export function animateDust() {
 	for (let dustParticle of dustParticles) {

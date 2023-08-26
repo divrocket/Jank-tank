@@ -40,15 +40,11 @@ export class Enemy {
 	}
 	
 	draw() {
-		ctx.shadowBlur = 15;
+		ctx.shadowBlur = 0;
 		ctx.shadowColor = "lime";
-		ctx.globalCompositeOperation = 'lighter';
-		
 		ctx.fillStyle = this.gradient;
 		ctx.fillRect(this.x, this.y, this.width, this.height);
-		
 		ctx.shadowBlur = 0;
-		ctx.globalCompositeOperation = 'source-over';
 	}
 	
 	update() {

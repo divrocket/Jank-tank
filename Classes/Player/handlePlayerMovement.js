@@ -1,4 +1,4 @@
-import {keys} from "../CollectionManagement/keys.js";
+import {keys} from "../CollectionManagement/collector.js";
 import {tank_cannon} from "../Config/tank_cannon.js";
 import {tank} from "../Config/tank.js";
 import {bulletEmitter} from "../Emitters/bulletEmitter.js";
@@ -6,10 +6,6 @@ import {reloadAmmo} from "./Actions/reloadAmmo.js";
 import {switchAmmoType} from "./Actions/switchAmmoType.js";
 import {pickUpAmmo} from "./Actions/pickUpAmmo.js";
 import {rockCollision} from "../Collision/rockCollision.js";
-import {drawTankTreadTrail} from "../Drawing/drawTankTreadTrail.js";
-import {drawTankTrails} from "../Drawing/drawTankTrails.js";
-import {tankTrail} from "../CollectionManagement/tankTrail.js";
-import {drawReloadingSpinner} from "../Drawing/drawReloadingSpinner.js";
 import {ctx} from "../Canvas/ctx.js";
 
 const MAX_CANNON_ANGLE = Math.PI / 2.5; // 45 degrees in radians

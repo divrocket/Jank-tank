@@ -1,28 +1,18 @@
-import {tankTrail} from "../CollectionManagement/tankTrail.js";
-import {bullets} from "../CollectionManagement/bullets.js";
-import {dustParticles} from "../CollectionManagement/dustParticles.js";
-import {snowflakes} from "../CollectionManagement/snowflakes.js";
-import {rocks} from "../CollectionManagement/rocks.js";
-import {enemies} from "../CollectionManagement/enemies.js";
-import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
-import {keys} from "../CollectionManagement/keys.js";
-import {particles} from "../CollectionManagement/particles.js";
-import {score} from "../CollectionManagement/score.js";
-
+import * as collection from "../CollectionManagement/collector.js";
 
 export class systemProfiler {
 	constructor() {
 		this._profiler = {
-			tankTrail: tankTrail,
-			bullets: bullets,
-			dustParticles: dustParticles,
-			snowflakes: snowflakes,
-			rocks: rocks,
-			enemies: enemies,
-			droppedAmmo: droppedAmmo,
-			keys: keys,
-			particles: particles,
-			score: score
+			tankTrail: collection.tankTrail,
+			bullets: collection.bullets,
+			dustParticles: collection.dustParticles,
+			snowflakes: collection.snowflakes,
+			rocks: collection.rocks,
+			enemies: collection.enemies,
+			droppedAmmo: collection.droppedAmmo,
+			keys: collection.keys,
+			particles: collection.particles,
+			score: collection.score
 		};
 	}
 	

@@ -1,6 +1,6 @@
 import {MuzzleParticle} from "../Objects/muzzleParticle.js";
 import {SmokeParticle} from "../Objects/smokeParticle.js";
-import {muzzleParticles} from "../CollectionManagement/muzzleParticles.js";
+import {muzzleParticles} from "../CollectionManagement/collector.js";
 
 export function weaponFireEmitter(x, y, mainAngle) {
 	// Angle boundaries for the cone shape

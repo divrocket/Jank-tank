@@ -1,7 +1,6 @@
 import {tank_cannon} from "../Config/tank_cannon.js";
-import {tank} from "../Config/tank.js";
-import {treadOffsetFactor} from "../Config/treadOffsetFactor.js";
-import {tankTrail} from "../CollectionManagement/tankTrail.js";
+import {tankTrail} from "../CollectionManagement/collector.js";
+
 export function drawTankTrails() {
 	let middleTread = {
 		x: tank_cannon.x,

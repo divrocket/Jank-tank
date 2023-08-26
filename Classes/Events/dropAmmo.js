@@ -1,6 +1,5 @@
-import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
+import {droppedAmmo, tankTrail} from "../CollectionManagement/collector.js";
 import {ammo} from "../Config/ammo.js";
-import {tankTrail} from "../CollectionManagement/tankTrail.js";
 
 export function dropAmmo(enemy) {
 	if (Math.random() < 0.4) {

@@ -1,12 +1,12 @@
 import {ctx} from "../Canvas/ctx.js";
 import {ammo} from "../Config/ammo.js";
-import {droppedAmmo} from "../CollectionManagement/droppedAmmo.js";
+import {droppedAmmo} from "../CollectionManagement/collector.js";
 
 export function drawDroppedAmmo() {
+	if (droppedAmmo.length <= 0) return;
+	
 	ctx.save();
-	
 	const currentTime = Date.now();
-	
 	for (let drop of droppedAmmo) {
 		const ammoColor = ammo[drop.type].color1;
 		

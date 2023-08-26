@@ -7,7 +7,7 @@ import {drawBackgroundImage} from "./Classes/Drawing/drawBackgroundImage.js";
 import {rockEmitter} from "./Classes/Emitters/rockEmitter.js";
 import {drawRocks} from "./Classes/Drawing/drawRocks.js";
 import {enemyEmitter} from "./Classes/Emitters/enemyEmitter.js";
-import {enemyCollision} from "./Classes/Collision/enemyCollision.js";
+import {enemyCollision, handleHealthPopups} from "./Classes/Collision/enemyCollision.js";
 import {displayScore} from "./Classes/Interfaces/displayScore.js";
 import {drawMuzzleFlash} from "./Classes/Drawing/drawMuzzleFlash.js";
 import {drawTankBody} from "./Classes/Drawing/drawTankBody.js";
@@ -38,12 +38,15 @@ function updateGameArea() {
 	drawReloadingSpinner();
 	drawRocks();
 	handleScorePopups();
+	handleHealthPopups();
+	
 	drawMuzzleFlash();
 	drawMuzzleParticles();
+	animateParticles();
 	
 	drawTankTreadTrail();
 	drawTankTrails();
-	animateParticles();
+	
 	handlePlayerMovement();
 	
 	// Collision
@@ -65,18 +68,15 @@ function updateGameArea() {
 
 //Screen Size change
 window.addEventListener("resize", () => {
-	// Drawing
-	drawBackgroundImage();
-	
 	ctx.canvas.width = window.innerWidth
 	ctx.canvas.height = window.innerHeight
-	
 });
 
 const init = async () => {
 	// Initial call to start the game loop
 	requestAnimationFrame(updateGameArea);
 	
+	// Emitter calls
 	enemyEmitter();
 	rockEmitter(6);
 	buildUX();

@@ -1,4 +1,4 @@
-import {particles} from "../CollectionManagement/particles.js";
+import {particles} from "../CollectionManagement/collector.js";
 import {ctx} from "../Canvas/ctx.js";
 
 export function drawParticles() {

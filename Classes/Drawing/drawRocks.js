@@ -1,5 +1,5 @@
 import {canvas, ctx} from "../Canvas/ctx.js";
-import {rocks} from "../CollectionManagement/rocks.js";
+import {rocks} from "../CollectionManagement/collector.js";
 
 export let rockImage = new Image();
 rockImage.src = 'Assets/Graphics/Asteroid Brown.png';

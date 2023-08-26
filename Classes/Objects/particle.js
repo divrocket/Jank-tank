@@ -2,7 +2,7 @@ import {ctx} from "../Canvas/ctx.js";
 import {ammo} from "../Config/ammo.js";
 
 export class Particle {
-	constructor(x, y) {
+	constructor(x, y, colors) {
 		this.x = x;
 		this.y = y;
 		this.size = Math.random() * 5 + 1;
@@ -14,9 +14,15 @@ export class Particle {
 		this.alpha = 1;
 		this.groundLevel = (this.y - 30) + (Math.random() * 200 + 10);
 		this.selectedAmmo = ammo[ammo.currentType];
-		this.colors = [
-			this.selectedAmmo.color1,
-		];
+		
+		if (colors === undefined || colors === null) {
+			colors = [
+				this.selectedAmmo.color1,
+				this.selectedAmmo.color2
+			];
+		}
+		
+		this.colors = colors
 		this.color = this.colors[Math.floor(Math.random() * this.colors.length)]; // Randomly select a color
 		
 		this.hasBounced = false; // flag to check if particle has bounced
@@ -59,7 +65,7 @@ export class Particle {
 		ctx.globalAlpha = this.alpha;
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.fill();
 		ctx.restore();
 	}
